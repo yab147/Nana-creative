@@ -1,157 +1,62 @@
 @import "tailwindcss";
 
 :root {
-  --brand-primary: #16834A;
-  --brand-dark: #105C35;
-  --brand-light: #E9F6EE;
-  --background: #FFFFFF;
-  --foreground: #17251C;
-  --border: #E2EAE4;
-  --button-background: #31fc09;
+  /* Locked Nana Creative Brand Palette */
+  --canvas-surface: #FFFFFF;
+  --canvas-editorial: #F7F9F8;
+  --brand-dark: #0B3B24;
+  --brand-dark-deep: #082A19;
+  --brand-slate: #1B263B;
+  --brand-primary: #8CC63F;
+  --brand-accent-glow: #99D12B;
+  --brand-pill: #E8F3EC;
 
+  --background: #FFFFFF;
+  --foreground: #082A19;
+  --border: #E8F3EC;
 }
 
 @theme inline {
-  --color-brand-primary: var(--brand-primary);
+  --color-canvas-surface: var(--canvas-surface);
+  --color-canvas-editorial: var(--canvas-editorial);
   --color-brand-dark: var(--brand-dark);
-  --color-brand-light: var(--brand-light);
+  --color-brand-dark-deep: var(--brand-dark-deep);
+  --color-brand-slate: var(--brand-slate);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-accent-glow: var(--brand-accent-glow);
+  --color-brand-pill: var(--brand-pill);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-border: var(--border);
-  --color-button-background: var(--button-background);
 }
 
-@keyframes leafGrow {
-  from {
-    opacity: 0;
-    transform: scale(0.2);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+html {
+  scroll-behavior: smooth;
+  background-color: var(--canvas-surface);
+  color: var(--brand-dark-deep);
 }
 
-.leaf {
-  transform-box: fill-box;
-  transform-origin: bottom center;
-  animation: leafGrow 1.5s ease-out both;
+::selection {
+  background-color: #8CC63F;
+  color: #082A19;
 }
 
-.leaf-two {
-  animation-delay: 0.5s;
+/* Custom subtle glow utility */
+.glow-sprout {
+  box-shadow: 0 0 25px -5px rgba(140, 198, 63, 0.45);
 }
 
-.leaf-three {
-  animation-delay: 1s;
-}
-
-.leaf-four {
-  animation-delay: 1.5s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .leaf {
-    animation: none;
-  }
-}
-
-/* Draw the mouse cable */
-.vine-path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: drawVine 4s cubic-bezier(0.65, 0, 0.35, 1) 0.5s forwards;
-}
-
-@keyframes drawVine {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Draw the branches */
-.vine-branch {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: drawBranch 1.2s ease-out forwards;
-}
-
-.branch-one {
-  animation-delay: 3.4s;
-}
-
-.branch-two {
-  animation-delay: 3.8s;
-}
-
-.branch-three {
-  animation-delay: 4.1s;
-}
-
-@keyframes drawBranch {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Grow the leaves */
-.leaf {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: bottom center;
-  transform: scale(0.1);
-  animation: growLeaf 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-.leaf-one {
-  animation-delay: 3.7s;
-}
-
-.leaf-two {
-  animation-delay: 4.5s;
-}
-
-.leaf-three {
-  animation-delay: 4.2s;
-}
-
-.leaf-four {
-  animation-delay: 4.8s;
-}
-
-@keyframes growLeaf {
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Floating mouse */
-.mouse-body {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: mouseFloat 3s ease-in-out infinite;
-}
-
-@keyframes mouseFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-8px);
-  }
+.glow-emerald {
+  box-shadow: 0 10px 30px -5px rgba(11, 59, 36, 0.25);
 }
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .vine-path,
-  .vine-branch,
-  .leaf,
-  .mouse-body {
-    animation: none;
-    stroke-dashoffset: 0;
-    opacity: 1;
-    transform: none;
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

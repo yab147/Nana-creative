@@ -1,231 +1,284 @@
-
 "use client";
 
+import React, { useState, useRef } from "react";
 import Link from "next/link";
-import { useState, type MouseEvent } from "react";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+import dynamic from "next/dynamic";
+import { getBrandProfileSync } from "@/data/brandProfile";
 
-function MousePlant() {
-  return (
-    <svg
-      viewBox="0 0 600 680"
-      className="h-full w-full"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="A computer mouse with a cable growing into a leafy plant"
-      role="img"
-    >
-      <defs>
-        <linearGradient id="mouseGreen" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#8BCF35" />
-          <stop offset="100%" stopColor="#087B37" />
-        </linearGradient>
-
-        <linearGradient id="leafGreen" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#A5DF49" />
-          <stop offset="100%" stopColor="#087B37" />
-        </linearGradient>
-      </defs>
-
-      {/* Mouse cable */}
-      <path
-        d="M285 550 C340 500 260 450 190 420 C110 385 135 340 205 320 C270 300 350 330 370 280 C390 230 330 210 350 150 C365 100 390 80 410 40"
-        stroke="#16834A"
-        strokeWidth="9"
-        strokeLinecap="round"
-        pathLength="1"
-        className="vine-path"
-      />
-
-      {/* Main stem */}
-      <path
-        d="M350 150 C310 120 285 95 290 50"
-        stroke="#16834A"
-        strokeWidth="7"
-        strokeLinecap="round"
-        pathLength="1"
-        className="vine-branch branch-one"
-      />
-
-      {/* Left branch */}
-      <path
-        d="M215 320 C170 285 130 280 95 255"
-        stroke="#16834A"
-        strokeWidth="6"
-        strokeLinecap="round"
-        pathLength="1"
-        className="vine-branch branch-two"
-      />
-
-      {/* Right branch */}
-      <path
-        d="M350 205 C400 185 430 160 445 120"
-        stroke="#16834A"
-        strokeWidth="6"
-        strokeLinecap="round"
-        pathLength="1"
-        className="vine-branch branch-three"
-      />
-
-      {/* Leaves */}
-      <g className="leaf leaf-one">
-        <path
-          d="M290 50 C235 10 220 65 290 105 C315 75 315 45 290 50Z"
-          fill="url(#leafGreen)"
-        />
-        <path d="M290 50 L290 100" stroke="#E9F6EE" strokeWidth="2" />
-      </g>
-
-      <g className="leaf leaf-two">
-        <path
-          d="M410 40 C405 -15 470 -20 480 35 C460 65 435 65 410 40Z"
-          fill="url(#leafGreen)"
-        />
-        <path d="M410 40 L470 25" stroke="#E9F6EE" strokeWidth="2" />
-      </g>
-
-      <g className="leaf leaf-three">
-        <path
-          d="M95 255 C35 220 55 175 120 195 C145 215 130 240 95 255Z"
-          fill="url(#leafGreen)"
-        />
-        <path d="M95 255 L75 205" stroke="#E9F6EE" strokeWidth="2" />
-      </g>
-
-      <g className="leaf leaf-four">
-        <path
-          d="M445 120 C460 65 520 80 510 135 C485 160 465 150 445 120Z"
-          fill="url(#leafGreen)"
-        />
-        <path d="M445 120 L495 100" stroke="#E9F6EE" strokeWidth="2" />
-      </g>
-
-      {/* Mouse body */}
-      <g className="mouse-body">
-        <ellipse
-          cx="290"
-          cy="570"
-          rx="95"
-          ry="65"
-          fill="url(#mouseGreen)"
-        />
-
-        <path
-          d="M290 505 V565"
-          stroke="#0B542B"
-          strokeWidth="3"
-        />
-
-        <rect
-          x="280"
-          y="520"
-          width="20"
-          height="28"
-          rx="10"
-          fill="#E9F6EE"
-        />
-
-        <ellipse
-          cx="290"
-          cy="570"
-          rx="95"
-          ry="65"
-          stroke="#0B542B"
-          strokeWidth="3"
-        />
-      </g>
-    </svg>
-  );
-}
+const NanaInteractiveLogo3D = dynamic(
+  () => import("@/modules/three/components/NanaInteractiveLogo3D"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-[500px] md:h-[620px] w-full items-center justify-center rounded-3xl border border-[#2A3A54] bg-[#1B263B] p-6 text-center shadow-2xl shadow-black/40">
+        <div className="flex flex-col items-center gap-3">
+          <span className="relative flex h-10 w-10">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#8CC63F] opacity-75" />
+            <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#0B1626] text-sm text-[#8CC63F]">
+              🌱
+            </span>
+          </span>
+          <span className="text-xs font-bold uppercase tracking-wider text-[#E8F3EC]/70">
+            Loading 3D Nana Creative Identity...
+          </span>
+        </div>
+      </div>
+    ),
+  }
+);
+import {
+  ArrowUpRight,
+  Play,
+  X,
+  Sparkles,
+  Sprout,
+  MapPin,
+  Layers,
+  CheckCircle2,
+} from "lucide-react";
 
 export default function Hero() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const brand = getBrandProfileSync();
+  const [showreelOpen, setShowreelOpen] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
 
-  function handleMouseMove(e: MouseEvent<HTMLElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
+  // Icon mapping for metrics
+  const getMetricIcon = (iconName?: string) => {
+    switch (iconName) {
+      case "sprout":
+        return <Sprout className="h-5 w-5 text-[#8CC63F]" />;
+      case "map-pin":
+        return <MapPin className="h-5 w-5 text-[#8CC63F]" />;
+      case "layers":
+        return <Layers className="h-5 w-5 text-[#8CC63F]" />;
+      default:
+        return <Sparkles className="h-5 w-5 text-[#8CC63F]" />;
+    }
+  };
 
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.1,
+      },
+    },
+  };
 
-    setPosition({
-      x: x * 16,
-      y: y * 16,
-    });
-  }
-
-  function handleMouseLeave() {
-    setPosition({ x: 0, y: 0 });
-  }
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
 
   return (
     <section
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="relative min-h-[calc(100svh-112px)] overflow-hidden bg-[#FCFDFC]"
+      ref={heroRef}
+      className="relative min-h-[calc(100svh-120px)] overflow-hidden bg-radial from-[#F7F9F8] via-[#FFFFFF] to-[#F7F9F8] py-8 lg:py-14"
     >
-      {/* Background decoration */}
-      <div className="pointer-events-none absolute right-0 top-20 h-[600px] w-[600px] rounded-full bg-brand-light/60 blur-[100px]" />
+      {/* Editorial Decorative Background Halos */}
+      <div className="pointer-events-none absolute -top-40 right-0 h-[640px] w-[640px] rounded-full bg-[#8CC63F]/10 blur-[130px]" />
+      <div className="pointer-events-none absolute bottom-0 left-[-10%] h-[500px] w-[500px] rounded-full bg-[#E8F3EC]/70 blur-[120px]" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-4 px-6 pb-24 pt-8 md:min-h-[calc(100svh-112px)] md:grid-cols-2 md:gap-8 md:py-8">
-
-        {/* Text content */}
-        <div className="relative z-10">
-          <div className="mb-8 inline-flex items-center gap-3 rounded-full bg-brand-light/70 px-4 py-2">
-            <span className="h-1 w-6 rounded-full bg-brand-primary" />
-            <span className="text-xs font-bold uppercase tracking-wide text-brand-dark">
-              Creative Ideas. Meaningful Impact.
-            </span>
-          </div>
-
-          <h1 className="max-w-2xl text-5xl font-extrabold leading-[1.12] tracking-tight text-[#14221B] md:text-7xl">
-            We grow ideas
-            <br />
-            that grow
-            <br />
-            <span className="text-brand-primary">
-              businesses.
-            </span>
-          </h1>
-
-          <p className="mt-8 max-w-lg text-lg leading-8 text-gray-600">
-            Nana Creative helps brands stand out, connect
-            with people, and grow through thoughtful design
-            and digital solutions.
-          </p>
-
-          <div className="mt-10 flex flex-wrap gap-5">
-            <Link
-              href="/contact"
-              className="rounded-xl bg-brand-primary px-7 py-4 font-semibold text-white shadow-lg shadow-green-900/10 transition hover:-translate-y-1 hover:bg-brand-dark"
-            >
-              Let's Work Together ↗
-            </Link>
-
-            <Link
-              href="/portfolio"
-              className="rounded-xl border border-gray-400 px-7 py-4 font-semibold text-gray-900 transition hover:border-brand-primary hover:bg-brand-light"
-            >
-              Explore Our Work ↗
-            </Link>
-          </div>
-        </div>
-
-        {/* Interactive illustration */}
-        <div className="relative flex min-h-[320px] items-center justify-center md:min-h-[460px]">
-          <div className="absolute inset-0 rounded-full bg-brand-light/50 blur-3xl" />
-
-          <div
-            className="relative h-[340px] w-full max-w-[420px] transition-transform duration-300 ease-out will-change-transform md:h-[460px]"
-            style={{
-              transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-            }}
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
+          {/* ========================================================= */}
+          {/* LEFT COLUMN: Editorial Copy, Signature Hook, Dual CTAs & Stats */}
+          {/* ========================================================= */}
+          <motion.div
+            className="lg:col-span-7 flex flex-col justify-center"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
-            <MousePlant />
+            {/* 1. Live Status Pill */}
+            <motion.div variants={itemVariants} className="mb-6 flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-[#0B3B24]/15 bg-[#E8F3EC] px-4 py-1.5 shadow-xs">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#8CC63F] opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#8CC63F]" />
+                </span>
+                <span className="text-xs font-bold text-[#0B3B24]">
+                  {brand.hero.statusBadge}
+                </span>
+              </div>
+            </motion.div>
+
+            {/* 2. Signature Hook Callout Banner */}
+            <motion.div variants={itemVariants} className="mb-5 inline-block">
+
+
+
+            </motion.div>
+
+            {/* 3. Editorial H1 Headline */}
+            <motion.h1
+              variants={itemVariants}
+              className="text-4xl font-extrabold tracking-tight text-[#082A19] sm:text-6xl lg:text-7xl leading-[1.08]"
+            >
+              {brand.hero.headlineLine1} <br />
+              {brand.hero.headlineLine2}{" "}
+              <span className="relative inline-block text-[#0B3B24]">
+                <span className="relative z-10 text-[#8CC63F]">{brand.hero.headlineHighlight}</span>
+                <span
+                  aria-hidden="true"
+                  className="absolute bottom-1 left-0 -z-0 h-3 w-full rounded-full bg-[#8CC63F]/20 sm:h-4"
+                />
+              </span>
+            </motion.h1>
+
+            {/* 4. Editorial Subhead Description */}
+            <motion.p
+              variants={itemVariants}
+              className="mt-6 max-w-xl text-base leading-relaxed text-[#082A19]/80 sm:text-lg sm:leading-8 font-normal"
+            >
+              {brand.hero.description}
+            </motion.p>
+
+            {/* 5. Dual CTAs */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-8 flex flex-wrap items-center gap-4 sm:gap-5"
+            >
+              <Link
+                href={brand.hero.primaryCta.href}
+                className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-[#0B3B24] px-7 py-4 text-sm font-bold text-white shadow-xl shadow-[#0B3B24]/20 transition-all duration-300 hover:bg-[#082A19] hover:shadow-2xl hover:shadow-[#0B3B24]/30 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
+              >
+                <span>{brand.hero.primaryCta.label}</span>
+                <ArrowUpRight className="h-4 w-4 text-[#8CC63F] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setShowreelOpen(true)}
+                className="group inline-flex items-center justify-center gap-3 rounded-2xl border-2 border-[#0B3B24]/15 bg-white px-6 py-4 text-sm font-bold text-[#082A19] shadow-sm transition-all duration-300 hover:border-[#8CC63F] hover:bg-[#E8F3EC]/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
+              >
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E8F3EC] text-[#0B3B24] transition-colors group-hover:bg-[#8CC63F] group-hover:text-[#082A19]">
+                  <Play className="h-3 w-3 fill-current ml-0.5" />
+                </div>
+                <span>{brand.hero.secondaryCta.label}</span>
+              </button>
+            </motion.div>
+
+            {/* 6. The 3 Metric Counters (Zero hardcoded, mapped from BrandProfile) */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-12 grid grid-cols-3 gap-3 rounded-3xl border border-[#E8F3EC] bg-white/70 p-5 shadow-lg shadow-[#0B3B24]/5 backdrop-blur-md sm:gap-6 sm:p-6"
+            >
+              {brand.hero.metrics.map((metric, index) => (
+                <div
+                  key={metric.id}
+                  className={`flex flex-col ${index < brand.hero.metrics.length - 1
+                      ? "border-r border-[#E8F3EC] pr-3 sm:pr-6"
+                      : ""
+                    }`}
+                >
+                  <div className="flex items-center gap-2">
+                    {getMetricIcon(metric.icon)}
+                    <span className="text-2xl font-black tracking-tight text-[#082A19] sm:text-3xl lg:text-4xl">
+                      {metric.value}
+                    </span>
+                  </div>
+                  <span className="mt-1 text-xs font-bold uppercase tracking-wider text-[#0B3B24]">
+                    {metric.label}
+                  </span>
+                  {metric.sublabel && (
+                    <span className="mt-0.5 text-[11px] text-[#082A19]/65 hidden sm:block">
+                      {metric.sublabel}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* ========================================================= */}
+          {/* RIGHT COLUMN: 3D Mouse-Sprout Stage (SproutEngine3D)     */}
+          {/* ========================================================= */}
+          <div className="lg:col-span-5 relative flex items-center justify-center">
+            {/* Glowing Backdrop Ring */}
+            <div className="pointer-events-none absolute inset-0 -m-4 rounded-full bg-radial from-[#8CC63F]/20 via-[#E8F3EC]/40 to-transparent blur-2xl" />
+
+            {/* Interactive 3D Nana Creative Logo Hero Centerpiece */}
+            <NanaInteractiveLogo3D />
           </div>
         </div>
       </div>
 
-      {/* Background waves */}
-      <div className="pointer-events-none absolute bottom-20 left-0 h-32 w-full -rotate-3 rounded-[50%] border-t border-brand-light/80 opacity-70" />
+      {/* ========================================================= */}
+      {/* SHOWREEL VIDEO MODAL OVERLAY                              */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {showreelOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
+            onClick={() => setShowreelOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/20 bg-[#082A19] shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#8CC63F]" />
+                  <span className="text-sm font-bold text-white">
+                    Nana Creative • Official Showreel
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowreelOpen(false)}
+                  className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition"
+                  aria-label="Close showreel modal"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Video Player */}
+              <div className="relative aspect-video w-full bg-black">
+                <video
+                  src="/videos/showreel.mp4"
+                  controls
+                  autoPlay
+                  className="h-full w-full object-contain"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0B3B24] px-6 py-4 text-xs text-white">
+                <span>&ldquo;{brand.hero.signatureHook}&rdquo;</span>
+                <a
+                  href={`tel:${brand.contact.primaryPhoneTel}`}
+                  className="inline-flex items-center gap-1.5 font-bold text-[#8CC63F] hover:underline"
+                >
+                  <span>Start your project: {brand.contact.primaryPhone}</span>
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
