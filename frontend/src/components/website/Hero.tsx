@@ -35,7 +35,6 @@ import {
   Sprout,
   MapPin,
   Layers,
-  CheckCircle2,
 } from "lucide-react";
 
 export default function Hero() {
@@ -114,10 +113,10 @@ export default function Hero() {
             </motion.div>
 
             {/* 2. Signature Hook Callout Banner */}
-            <motion.div variants={itemVariants} className="mb-5 inline-block">
-
-
-
+            <motion.div variants={itemVariants} className="mb-4 inline-block">
+              <span className="text-xs font-mono tracking-wider uppercase text-[#0B3B24]/70 bg-white/80 px-3 py-1 rounded-full border border-[#E8F3EC]">
+                {brand.signatureHook}
+              </span>
             </motion.div>
 
             {/* 3. Editorial H1 Headline */}

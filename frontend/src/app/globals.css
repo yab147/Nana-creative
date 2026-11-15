@@ -4,11 +4,16 @@
   /* Locked Nana Creative Brand Palette */
   --canvas-surface: #FFFFFF;
   --canvas-editorial: #F7F9F8;
+  --canvas: #FFFFFF;
+  --brand-emerald: #0B3B24;
   --brand-dark: #0B3B24;
   --brand-dark-deep: #082A19;
+  --brand-navy: #1B263B;
   --brand-slate: #1B263B;
+  --brand-lime: #8CC63F;
   --brand-primary: #8CC63F;
   --brand-accent-glow: #99D12B;
+  --surface-mint: #E8F3EC;
   --brand-pill: #E8F3EC;
 
   --background: #FFFFFF;
@@ -19,11 +24,16 @@
 @theme inline {
   --color-canvas-surface: var(--canvas-surface);
   --color-canvas-editorial: var(--canvas-editorial);
+  --color-canvas: var(--canvas);
+  --color-brand-emerald: var(--brand-emerald);
   --color-brand-dark: var(--brand-dark);
   --color-brand-dark-deep: var(--brand-dark-deep);
+  --color-brand-navy: var(--brand-navy);
   --color-brand-slate: var(--brand-slate);
+  --color-brand-lime: var(--brand-lime);
   --color-brand-primary: var(--brand-primary);
   --color-brand-accent-glow: var(--brand-accent-glow);
+  --color-surface-mint: var(--surface-mint);
   --color-brand-pill: var(--brand-pill);
 
   --color-background: var(--background);

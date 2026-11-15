@@ -73,6 +73,74 @@ export interface BrandPalette {
   secondaryPill: string;
 }
 
+export interface AboutTagItem {
+  id: string;
+  label: string;
+  icon?: string;
+}
+
+export interface AboutContent {
+  sectionBadge: string;
+  headline: string;
+  body: string;
+  tags: AboutTagItem[];
+}
+
+export interface ServiceItem {
+  id: string;
+  number: string;
+  title: string;
+  description: string;
+  icon: string;
+  focusAreas?: string[];
+}
+
+export interface ServicesContent {
+  sectionBadge: string;
+  headline: string;
+  subheadline: string;
+  services: ServiceItem[];
+}
+
+export interface GearItem {
+  id: string;
+  category: string;
+  name: string;
+  spec: string;
+  icon: string;
+  badge?: string;
+}
+
+export interface GearContent {
+  sectionBadge: string;
+  headline: string;
+  subheadline: string;
+  items: GearItem[];
+}
+
+export interface ClientItem {
+  id: string;
+  name: string;
+  industry?: string;
+  badge?: string;
+}
+
+export interface ClientCategory {
+  id: string;
+  title: string;
+  description: string;
+  isSpecialAuthority?: boolean;
+  badgeText?: string;
+  clients: ClientItem[];
+}
+
+export interface PortfolioContent {
+  sectionBadge: string;
+  headline: string;
+  subheadline: string;
+  categories: ClientCategory[];
+}
+
 export interface BrandProfile {
   name: string;
   legalName: string;
@@ -85,4 +153,8 @@ export interface BrandProfile {
   contact: BrandContact;
   navigation: NavItem[];
   hero: HeroContent;
+  about: AboutContent;
+  services: ServicesContent;
+  gear: GearContent;
+  portfolio: PortfolioContent;
 }

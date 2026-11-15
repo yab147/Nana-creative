@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getBrandProfileSync } from "@/data/brandProfile";
-import { Phone, ArrowUpRight, Menu, X, Sparkles } from "lucide-react";
+import { Phone, ArrowUpRight, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const brand = getBrandProfileSync();
@@ -13,28 +13,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[#E8F3EC] bg-white/85 backdrop-blur-xl transition-all">
-      {/* Top micro-bar for Live Status & Hubs */}
-      {brand.status.acceptingNewClients && (
-        <div className="bg-[#0B3B24] px-4 py-1.5 text-center text-xs font-medium text-[#E8F3EC]">
-          <div className="mx-auto flex max-w-7xl items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#8CC63F] opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#8CC63F]" />
-              </span>
-              <span className="text-[11px] font-semibold tracking-wide text-white">
-                {brand.status.label}
-              </span>
-            </div>
-            <div className="hidden sm:flex items-center gap-4 text-[11px] text-[#E8F3EC]/80">
-              <span>Direct Hotline: <a href={`tel:${brand.contact.primaryPhoneTel}`} className="font-semibold text-white hover:text-[#8CC63F] underline decoration-[#8CC63F]/50">{brand.contact.primaryPhone}</a></span>
-              <span>•</span>
-              <a href={brand.contact.tiktokUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white transition">TikTok {brand.contact.tiktokHandle}</a>
-            </div>
-          </div>
-        </div>
-      )}
+    <header className="sticky top-0 z-50 w-full border-b border-[#E8F3EC] bg-white/90 backdrop-blur-xl transition-all">
 
       {/* Main Navbar */}
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3.5">
@@ -93,7 +72,7 @@ export default function Navbar() {
             className="group inline-flex items-center gap-2 rounded-full bg-[#0B3B24] px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-[#0B3B24]/15 transition-all duration-300 hover:bg-[#082A19] hover:shadow-lg hover:shadow-[#0B3B24]/25 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F] focus:ring-offset-2"
           >
             <Phone className="h-3.5 w-3.5 text-[#8CC63F] transition-transform group-hover:rotate-12" />
-            <span>Let's Talk</span>
+            <span>Let&apos;s Talk</span>
             <ArrowUpRight className="h-3.5 w-3.5 text-[#8CC63F] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         </div>
@@ -144,7 +123,7 @@ export default function Navbar() {
               className="flex items-center justify-center gap-2 rounded-xl bg-[#0B3B24] px-5 py-3.5 text-sm font-bold text-white shadow-md shadow-[#0B3B24]/15 hover:bg-[#082A19]"
             >
               <Phone className="h-4 w-4 text-[#8CC63F]" />
-              <span>Let's Talk ({brand.contact.primaryPhone})</span>
+              <span>Let&apos;s Talk ({brand.contact.primaryPhone})</span>
               <ArrowUpRight className="h-4 w-4 text-[#8CC63F]" />
             </a>
             <div className="flex items-center justify-between text-xs text-[#082A19]/70 px-1 pt-2">

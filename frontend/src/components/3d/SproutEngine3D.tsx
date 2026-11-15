@@ -1,9 +1,8 @@
 "use client";
 
-import React, { Suspense, useState, useRef } from "react";
+import React, { Suspense, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import MouseSproutModel from "./MouseSproutModel";
-import { motion, AnimatePresence } from "framer-motion";
 
 function SceneFallback() {
   return (
@@ -49,46 +48,13 @@ export default function SproutEngine3D({
   containerClassName = "h-[460px] md:h-[620px] w-full",
   scrollTriggerElement,
 }: SproutEngine3DProps) {
-  const [pulseCount, setPulseCount] = useState<number>(0);
-  const [lastPulseText, setLastPulseText] = useState<string>("Click mouse to pulse");
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const handlePulse = () => {
-    setPulseCount((prev) => prev + 1);
-    setLastPulseText("Energy pulsed upward! ⚡🌱");
-    setTimeout(() => {
-      setLastPulseText("Click mouse to pulse again");
-    }, 2400);
-  };
 
   return (
     <div
       ref={containerRef}
       className={`relative select-none overflow-hidden rounded-3xl bg-radial from-[#F7F9F8] via-[#FFFFFF] to-[#E8F3EC]/30 p-2 shadow-2xl shadow-[#0B3B24]/5 border border-[#E8F3EC] ${containerClassName}`}
     >
-      {/* Editorial Watermark Badge */}
-      <div className="pointer-events-none absolute left-6 top-6 z-10 flex items-center gap-2 rounded-full border border-[#0B3B24]/10 bg-white/80 px-3.5 py-1.5 backdrop-blur-md">
-        <span className="relative flex h-2.5 w-2.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#8CC63F] opacity-75" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#8CC63F]" />
-        </span>
-        <span className="text-[11px] font-bold uppercase tracking-wider text-[#0B3B24]">
-          SproutEngine 3D • WebGL
-        </span>
-      </div>
-
-      {/* Interactive Pulsing Trigger Pill / Counter */}
-      <div className="pointer-events-none absolute bottom-6 right-6 z-10 hidden sm:flex items-center gap-3 rounded-2xl border border-white/60 bg-white/85 px-4 py-2.5 shadow-lg shadow-[#0B3B24]/5 backdrop-blur-md">
-        <div className="text-right">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-[#0B3B24]/60">
-            {pulseCount > 0 ? `Pulses Sent: ${pulseCount}` : "Interactive Canvas"}
-          </p>
-          <p className="text-xs font-semibold text-[#082A19]">{lastPulseText}</p>
-        </div>
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#8CC63F]/20 text-[#0B3B24]">
-          <span className="text-sm">🌱</span>
-        </div>
-      </div>
 
       {/* R3F WebGL Canvas */}
       <Suspense fallback={<SceneFallback />}>
@@ -132,16 +98,10 @@ export default function SproutEngine3D({
 
           {/* 3D Model Instance */}
           <MouseSproutModel
-            onPulseTriggered={handlePulse}
             scrollTriggerElement={scrollTriggerElement}
           />
         </Canvas>
       </Suspense>
-
-      {/* Mobile hint badge */}
-      <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 sm:hidden rounded-full bg-white/90 px-3 py-1 shadow-sm border border-[#E8F3EC] text-[10px] font-semibold text-[#0B3B24]">
-        Tap mouse to pulse energy 🌱
-      </div>
     </div>
   );
 }

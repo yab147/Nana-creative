@@ -43,6 +43,12 @@ const partners: Partner[] = [
     description: "Creating new opportunities through a shared vision.",
     logo: "/images/partners/partner-5.jpeg",
   },
+  {
+    id: 6,
+    name: "Organization Six",
+    description: "A partner organization that shares our values.",
+    logo: "/images/partners/partner-6.jpeg",
+  },
 ];
 
 export default function PartnersMap() {
@@ -100,7 +106,7 @@ export default function PartnersMap() {
   }
 
   return (
-    <section className="overflow-hidden bg-[#F8FBF8] py-20 md:py-24">
+    <section id="partnerships" className="overflow-hidden bg-[#F8FBF8] py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-14 text-center">
           <span className="text-sm font-bold uppercase tracking-[4px] text-brand-primary">
@@ -124,9 +130,8 @@ export default function PartnersMap() {
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerUp}
-              className={`relative aspect-square w-full max-w-[520px] touch-none select-none rounded-full ${
-                isDragging ? "cursor-grabbing" : "cursor-grab"
-              }`}
+              className={`relative aspect-square w-full max-w-[520px] touch-none select-none rounded-full ${isDragging ? "cursor-grabbing" : "cursor-grab"
+                }`}
               role="group"
               aria-label="Partner logos orbiting around a map of Ethiopia. Drag to rotate."
             >
@@ -169,11 +174,10 @@ export default function PartnersMap() {
                     onClick={() => setSelectedPartner(partner)}
                     aria-label={`View ${partner.name}`}
                     aria-pressed={isSelected}
-                    className={`absolute z-20 flex h-[72px] w-[72px] items-center justify-center rounded-full border-2 bg-white p-3 shadow-lg transition-[border-color,box-shadow] duration-300 hover:border-brand-primary md:h-[88px] md:w-[88px] ${
-                      isSelected
-                        ? "border-brand-primary shadow-green-900/20 ring-4 ring-brand-primary/10"
-                        : "border-white"
-                    }`}
+                    className={`absolute z-20 flex h-[72px] w-[72px] items-center justify-center rounded-full border-2 bg-white p-3 shadow-lg transition-[border-color,box-shadow] duration-300 hover:border-brand-primary md:h-[88px] md:w-[88px] ${isSelected
+                      ? "border-brand-primary shadow-green-900/20 ring-4 ring-brand-primary/10"
+                      : "border-white"
+                      }`}
                     style={{
                       left: `${x}%`,
                       top: `${y}%`,

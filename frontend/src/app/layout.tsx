@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
+import Footer from "@/components/website/Footer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,8 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="min-h-screen bg-white text-[#082A19] antialiased">
-        {children}
+      <body className="min-h-screen flex flex-col bg-white text-[#082A19] antialiased">
+        <div className="flex-1 flex flex-col">{children}</div>
+        <Footer />
       </body>
     </html>
   );
