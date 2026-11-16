@@ -251,6 +251,7 @@ export default function MouseSproutModel({
   }, [scrollTriggerElement]);
 
   // Frame loop: updates GLSL pulse progress, organic sway, and cursor parallax
+  /* eslint-disable react-hooks/immutability */
   useFrame((state, delta) => {
     const time = state.clock.getElapsedTime();
 
@@ -258,7 +259,9 @@ export default function MouseSproutModel({
     if (pulseActive) {
       pulseProgressRef.current += delta * 1.35; // propagation speed
       if (pulseProgressRef.current > 1.2) {
-        pulseActive && setPulseActive(false);
+        if (pulseActive) {
+          setPulseActive(false);
+        }
         pulseProgressRef.current = -0.5;
         pulseIntensityRef.current = 0;
       }
@@ -314,6 +317,7 @@ export default function MouseSproutModel({
       );
     }
   });
+  /* eslint-enable react-hooks/immutability */
 
   return (
     <group ref={rootGroupRef} position={[0, -1.2, 0]}>

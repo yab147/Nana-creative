@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   icons: {
     icon: brandProfileSeed.logo.src,
   },
+  metadataBase: new URL(brandProfileSeed.contact.websiteUrl || "https://nanacreatives.et"),
   openGraph: {
     title: brandProfileSeed.legalName,
     description: `${brandProfileSeed.tagline} — ${brandProfileSeed.hero.signatureHook}`,

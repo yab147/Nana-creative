@@ -1,57 +1,13 @@
 "use client";
 
 import React from "react";
-import { motion, type Variants } from "framer-motion";
-import {
-  Camera,
-  Sliders,
-  SunMedium,
-  Mic,
-  Cpu,
-  CheckCircle2,
-} from "lucide-react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { nanaGearContent } from "@/data/nanaContent";
 
 export default function GearShowcase() {
   const gearData = nanaGearContent;
-
-  const getGearIcon = (iconName: string) => {
-    switch (iconName) {
-      case "camera":
-        return <Camera className="h-5 w-5 text-[#0B3B24]" aria-hidden="true" />;
-      case "sliders":
-        return <Sliders className="h-5 w-5 text-[#0B3B24]" aria-hidden="true" />;
-      case "sun-medium":
-        return <SunMedium className="h-5 w-5 text-[#0B3B24]" aria-hidden="true" />;
-      case "mic":
-        return <Mic className="h-5 w-5 text-[#0B3B24]" aria-hidden="true" />;
-      default:
-        return <Cpu className="h-5 w-5 text-[#0B3B24]" aria-hidden="true" />;
-    }
-  };
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const rowVariants: Variants = {
-    hidden: { opacity: 0, y: 18 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.45,
-        ease: "easeOut",
-      },
-    },
-  };
 
   return (
     <section
@@ -59,7 +15,7 @@ export default function GearShowcase() {
       className="relative bg-white py-20 lg:py-28 text-[#1B263B]"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        {/* Header */}
+        {/* Section Header */}
         <div className="mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div className="max-w-2xl">
             <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#E8F3EC] bg-[#F7F9F8] px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-[#0B3B24]">
@@ -80,90 +36,59 @@ export default function GearShowcase() {
           </div>
         </div>
 
-        {/* Minimalist Spec-Sheet Table / Ledger */}
-        <div className="overflow-hidden rounded-3xl border border-[#E8F3EC] bg-white shadow-xl shadow-[#0B3B24]/5">
-          {/* Spec Sheet Table Header (Desktop) */}
-          <div className="hidden md:grid grid-cols-12 gap-4 border-b border-[#E8F3EC] bg-[#F7F9F8] px-8 py-4 text-[11px] font-mono uppercase tracking-wider text-[#0B3B24]/70">
-            <div className="col-span-2">Category</div>
-            <div className="col-span-3">Hardware Model</div>
-            <div className="col-span-5">Technical Specification</div>
-            <div className="col-span-2 text-right">Production Role</div>
-          </div>
+        {/* Responsive CSS Grid (grid-cols-1 md:grid-cols-2 lg:grid-cols-4) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {gearData.items.map((item, index) => (
+            <motion.div
+              key={item.name}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.15,
+                ease: "easeOut",
+              }}
+              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#E8F3EC] bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+            >
+              {/* Card Image: Top half light grey image container rendering Next.js <Image /> */}
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F7F9F8]">
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={600}
+                  height={450}
+                  className="object-cover w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
+                />
 
-          {/* Spec Rows with Staggered Entrance and Hover Effect */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            className="divide-y divide-[#E8F3EC]"
-          >
-            {gearData.items.map((item) => (
-              <motion.div
-                key={item.id}
-                variants={rowVariants}
-                whileHover={{ y: -2, backgroundColor: "#F7F9F8" }}
-                transition={{ duration: 0.2 }}
-                className="group grid grid-cols-1 md:grid-cols-12 gap-4 items-center px-6 sm:px-8 py-6 transition-colors duration-200"
-              >
-                {/* Category Column */}
-                <div className="md:col-span-2 flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#E8F3EC] group-hover:bg-white group-hover:shadow-sm transition-all duration-200">
-                    {getGearIcon(item.icon)}
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#0B3B24]/60 block md:hidden">
-                      Category
-                    </span>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#0B3B24]">
-                      {item.category}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Hardware Name Column */}
-                <div className="md:col-span-3">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#0B3B24]/60 block md:hidden">
-                    Equipment
+                {/* Floating Tag: Absolutely positioned over the top-left inside a white pill with dark green text */}
+                <div className="absolute top-3.5 left-3.5 z-10">
+                  <span className="inline-flex items-center rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#0B3B24] shadow-sm border border-[#E8F3EC]">
+                    {item.tag}
                   </span>
-                  <h3 className="text-lg font-bold text-[#1B263B] group-hover:text-[#0B3B24] transition-colors">
+                </div>
+              </div>
+
+              {/* Card Body: Bottom half with bold name, grey description, and Sprout Lime Green arrow button */}
+              <div className="flex flex-col flex-1 justify-between p-6">
+                <div>
+                  <h3 className="text-xl font-bold tracking-tight text-[#1B263B] group-hover:text-[#0B3B24] transition-colors">
                     {item.name}
                   </h3>
-                </div>
-
-                {/* Specs Column */}
-                <div className="md:col-span-5">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#0B3B24]/60 block md:hidden">
-                    Specification
-                  </span>
-                  <p className="text-sm leading-relaxed text-[#1B263B]/75 font-normal">
-                    {item.specification}
+                  <p className="mt-2.5 text-sm leading-relaxed text-[#1B263B]/70 font-normal">
+                    {item.description}
                   </p>
                 </div>
 
-                {/* Role / Badge Column */}
-                <div className="md:col-span-2 flex items-center justify-start md:justify-end gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#8CC63F]/30 bg-[#E8F3EC] px-3 py-1 text-xs font-semibold text-[#0B3B24]">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-[#8CC63F]" />
-                    {item.roleBadge}
-                  </span>
+                {/* Circular Sprout Lime Green (#8CC63F) arrow button at the bottom left */}
+                <div className="mt-6 flex items-center justify-start">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#8CC63F] text-[#0B3B24] shadow-xs transition-transform duration-200 group-hover:scale-110">
+                    <ArrowUpRight className="h-5 w-5 stroke-[2.5]" />
+                  </div>
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Spec Footer Bar */}
-          <div className="border-t border-[#E8F3EC] bg-[#F7F9F8] px-6 sm:px-8 py-3.5 flex flex-wrap items-center justify-between text-xs text-[#0B3B24]/70">
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#8CC63F]" />
-              <span className="font-mono text-[11px] uppercase tracking-wider">
-                Active In-House Inventory • Dire Dawa & Addis Ababa
-              </span>
-            </div>
-            <span className="font-mono text-[11px] uppercase tracking-wider text-[#0B3B24]">
-              Zero Third-Party Production Rental Lag
-            </span>
-          </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

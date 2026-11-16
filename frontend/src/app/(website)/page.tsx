@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Hero from "@/components/website/Hero";
-import { ArrowUpRight, Sparkles, Layers, Briefcase, Handshake, Phone } from "lucide-react";
+import PartnersOverview from "@/components/website/PartnersOverview";
+import { ArrowUpRight, Sparkles, Layers, Briefcase, Handshake, Phone, Newspaper } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Nana Creative • We Grow Ideas That Grow Businesses",
@@ -29,6 +30,15 @@ const pageModules = [
     cta: "View Client Roster",
   },
   {
+    title: "Editorial & Intelligence",
+    badge: "Swagger Live",
+    description:
+      "Read our latest playbooks, engineering dispatches, and cinema production breakdowns.",
+    href: "/blog",
+    icon: Newspaper,
+    cta: "Read Dispatches",
+  },
+  {
     title: "Strategic Partnerships",
     badge: "Network",
     description:
@@ -54,7 +64,10 @@ export default function Home() {
       {/* 1. 3D Hero Section (Pure 3D interactive center, zero overlay clutter) */}
       <Hero />
 
-      {/* 2. Editorial Gateway: Modular Multi-Page Navigation Hub */}
+      {/* 2. Partners Overview Section (Infinite-scrolling luxury client marquee) */}
+      <PartnersOverview />
+
+      {/* 3. Editorial Gateway: Modular Multi-Page Navigation Hub */}
       <section className="border-t border-[#E8F3EC] bg-[#F7F9F8] py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -77,7 +90,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {pageModules.map((module) => {
               const Icon = module.icon;
               return (

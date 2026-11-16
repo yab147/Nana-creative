@@ -32,12 +32,15 @@ export interface NanaServicesData {
 }
 
 export interface NanaGearItem {
-  id: string;
-  category: string;
+  id?: string;
+  tag: string;
   name: string;
-  specification: string;
-  icon: "camera" | "sliders" | "sun-medium" | "mic";
-  roleBadge: string;
+  description: string;
+  image: string;
+  category?: string;
+  specification?: string;
+  icon?: "camera" | "sliders" | "sun-medium" | "mic";
+  roleBadge?: string;
 }
 
 export interface NanaGearData {
@@ -51,11 +54,13 @@ export interface NanaGearData {
 export interface SuccessStoryItem {
   id: string;
   name: string;
-  category: string;
   industry: string;
-  tiktokUrl: string;
-  isHealthcare: boolean;
   tier: "Enterprise" | "Healthcare" | "Fast-Growing";
+  logoPath: string;
+  tiktokUrl: string;
+  description?: string;
+  category?: string;
+  isHealthcare?: boolean;
   badge?: string;
 }
 
@@ -175,7 +180,7 @@ export const nanaServicesContent: NanaServicesData = {
       number: "02",
       title: "Commercial Video Production",
       description:
-        "Short-form viral hooks, brand commercials, scriptwriting, talent and modeling setup, and professional set direction.",
+        "Short-form viral hooks, brand commercials, scriptwriting, talent and modeling setup.",
       icon: "video",
       deliverables: [
         "Short-form viral hooks",
@@ -216,107 +221,141 @@ export const nanaServicesContent: NanaServicesData = {
 };
 
 // C. Success Stories / Client Data (SHARED by Portfolio & Partnership)
+// C. Success Stories / Client Data (Master List in Portfolio)
 export const successStories: SuccessStoryItem[] = [
   {
     id: "story-free-spring",
     name: "Free Spring Water",
     category: "Beverage",
-    industry: "Beverage",
+    industry: "Beverage & FMCG",
+    tier: "Enterprise",
+    description:
+      "Pioneering natural mineral water bottling, distribution, and large-scale commercial campaigns across Ethiopia.",
+    logoPath: "/images/portfolio/free-spring.jpg",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Enterprise",
   },
   {
     id: "story-wabi",
     name: "Wabi Business Group",
     category: "Business Group",
-    industry: "Business Group",
+    industry: "Conglomerate & Trade",
+    tier: "Enterprise",
+    description:
+      "Multi-sector investment conglomerate driving international trade, industrial operations, and enterprise expansion.",
+    logoPath: "/images/portfolio/wabi-group.png",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Enterprise",
   },
   {
     id: "story-rg-family",
     name: "RG & Family Real Estate",
     category: "Real Estate",
-    industry: "Real Estate",
+    industry: "Real Estate Development",
+    tier: "Enterprise",
+    description:
+      "Luxury residential developments and modern architectural living spaces in prime metropolitan centers.",
+    logoPath: "/images/portfolio/rg-family.png",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Enterprise",
   },
   {
     id: "story-shumbro",
     name: "Shumbro Plastic Factory",
     category: "Manufacturing",
-    industry: "Manufacturing",
+    industry: "Industrial Manufacturing",
+    tier: "Enterprise",
+    description:
+      "Industrial manufacturing delivering high-grade polymers, consumer packaging, and heavy production supplies.",
+    logoPath: "/images/portfolio/shumbro.jpeg",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Enterprise",
   },
   {
     id: "story-b-capital",
     name: "B Capital Hotel",
     category: "Hospitality",
-    industry: "Hospitality",
+    industry: "Hospitality & Tourism",
+    tier: "Enterprise",
+    description:
+      "Premier luxury hospitality and boutique business lodging offering world-class guest experiences.",
+    logoPath: "/images/portfolio/b-capital.jpeg",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Enterprise",
   },
   {
     id: "story-kuku",
     name: "Kuku Chicken",
     category: "Food",
-    industry: "Food",
+    industry: "Fast Food Franchise",
+    tier: "Enterprise",
+    description:
+      "High-energy fast-food franchise scaling rapidly with viral short-form social hooks and community-driven promotions.",
+    logoPath: "/images/portfolio/kuku-chicken.jpg",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Enterprise",
   },
   {
     id: "story-dr-kefelegn",
     name: "Dr. KeFelegn Dental Clinic",
     category: "Healthcare",
-    industry: "Healthcare",
+    industry: "Advanced Clinical Dentistry",
+    tier: "Healthcare",
+    description:
+      "Specialized clinical dental surgery and oral healthcare center positioned with authoritative medical credibility.",
+    logoPath: "/images/portfolio/dr-kefelegn.jpg",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: true,
-    tier: "Healthcare",
     badge: "Clinical Authority",
   },
   {
     id: "story-bright-aesthetics",
     name: "Bright Aesthetics",
     category: "Aesthetics",
-    industry: "Aesthetics",
+    industry: "Medical Aesthetics & Dermatology",
+    tier: "Healthcare",
+    description:
+      "Medical aesthetics and precision dermatology clinic delivering verified clinical skin transformations.",
+    logoPath: "/images/portfolio/bright-aesthetics.jpeg",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: true,
-    tier: "Healthcare",
     badge: "Medical Aesthetic Authority",
   },
   {
     id: "story-mekdi",
     name: "Mekdi Perfume",
     category: "Perfume",
-    industry: "Perfume",
+    industry: "Luxury Perfumes & Scents",
+    tier: "Fast-Growing",
+    description:
+      "High-end luxury fragrance and curated perfumery house experiencing exponential audience momentum.",
+    logoPath: "/images/portfolio/mekdi-perfume.jpeg",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Fast-Growing",
   },
   {
     id: "story-raki",
     name: "Raki Cosmetics",
     category: "Cosmetics",
-    industry: "Cosmetics",
+    industry: "Cosmetics & Skincare",
+    tier: "Fast-Growing",
+    description:
+      "Modern skincare and color cosmetics brand commanding viral social engagement and retail distribution.",
+    logoPath: "/images/portfolio/raki-cosmetics.jpg",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Fast-Growing",
   },
   {
     id: "story-delight-burger",
     name: "Delight Burger",
     category: "Food",
-    industry: "Food",
+    industry: "Culinary & Dining",
+    tier: "Fast-Growing",
+    description:
+      "Artisanal gourmet burger concept scaling fast with high-retention food showcase videos.",
+    logoPath: "/images/portfolio/delight-burger.png",
     tiktokUrl: "https://www.tiktok.com/@nana_creatives",
     isHealthcare: false,
-    tier: "Fast-Growing",
   },
 ];
 
@@ -326,39 +365,55 @@ export const nanaGearContent: NanaGearData = {
   sectionBadge: "Production Spec-Sheet",
   headline: "Production Gear",
   subheadline:
-    "Minimalist spec-sheet layout of our core capture, stabilization, lighting, and wireless audio inventory.",
+    "Cinema-grade capture, motion stabilization, studio lighting, and wireless audio inventory.",
   items: [
     {
-      id: "gear-camera",
-      category: "Camera",
+      id: "gear-canon-r6",
+      tag: "CAMERA",
       name: "Canon R6",
+      description:
+        "Cinema-grade imaging with sharp low-light performance for commercials and social content.",
+      image: "/images/gear-canon.jpg",
+      category: "Camera",
       specification:
         "Full-Frame 4K Cinema Capture • Dual Pixel CMOS AF II • High Dynamic Range C-Log3",
       icon: "camera",
       roleBadge: "Cinema Capture",
     },
     {
-      id: "gear-gimbals",
-      category: "Gimbals",
+      id: "gear-dji-rs",
+      tag: "GIMBALS",
       name: "DJI RS 3 & RS 4",
+      description:
+        "Dynamic camera movement — tracking, orbit and reveal shots that keep viewers watching.",
+      image: "/images/gear-dji.jpg",
+      category: "Gimbals",
       specification:
         "3-Axis Professional Stabilization • Automated Axis Locks • Native Vertical Short-Form Framing",
       icon: "sliders",
       roleBadge: "Dynamic Movement",
     },
     {
-      id: "gear-lighting",
-      category: "Studio Lighting",
+      id: "gear-amaran-300c",
+      tag: "STUDIO LIGHTING",
       name: "Amaran 300c / Nanlite",
+      description:
+        "Studio lighting with full control of mood, skin tones and product looks on every set.",
+      image: "/images/gear-amaran.jpg",
+      category: "Studio Lighting",
       specification:
         "Full-Color RGBWW Point-Source Fixtures • High Color Accuracy 95+ CRI • Bowens Mount Modifiers",
       icon: "sun-medium",
       roleBadge: "High-Output Illumination",
     },
     {
-      id: "gear-audio",
-      category: "Wireless Audio",
+      id: "gear-hollyland-lark",
+      tag: "WIRELESS AUDIO",
       name: "Hollyland Lark M2",
+      description:
+        "Clean wireless audio for talent, interviews and on-location shoots — no cable clutter.",
+      image: "/images/gear-hollyland.jpg",
+      category: "Wireless Audio",
       specification:
         "48kHz / 24-bit Hi-Fi Audio Transmission • Environmental Noise Cancellation (ENC) • Studio-Grade Clarity",
       icon: "mic",
@@ -435,5 +490,6 @@ export const nanaNavigationItems: NanaNavigationItem[] = [
     href: "/analytics",
     badge: "TikTok Live",
   },
+  { id: "nav-blog", name: "Blog", href: "/blog" },
   { id: "nav-contact", name: "Contact", href: "/contact" },
 ];

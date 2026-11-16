@@ -53,6 +53,7 @@ export const brandProfileSeed: BrandProfile = {
       href: "/analytics",
       badge: "TikTok Live",
     },
+    { id: "nav-blog", name: "Blog", href: "/blog" },
     { id: "nav-contact", name: "Contact", href: "/contact" },
   ],
   hero: {

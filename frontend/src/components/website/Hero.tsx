@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import dynamic from "next/dynamic";
 import { getBrandProfileSync } from "@/data/brandProfile";
 
@@ -30,7 +30,6 @@ const NanaInteractiveLogo3D = dynamic(
 import {
   ArrowUpRight,
   Play,
-  X,
   Sparkles,
   Sprout,
   MapPin,
@@ -39,7 +38,6 @@ import {
 
 export default function Hero() {
   const brand = getBrandProfileSync();
-  const [showreelOpen, setShowreelOpen] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
 
   // Icon mapping for metrics
@@ -100,7 +98,7 @@ export default function Hero() {
             animate="visible"
           >
             {/* 1. Live Status Pill */}
-            <motion.div variants={itemVariants} className="mb-6 flex flex-wrap items-center gap-2">
+            <motion.div variants={itemVariants} className="mb-5 flex flex-wrap items-center gap-2">
               <div className="inline-flex items-center gap-2.5 rounded-full border border-[#0B3B24]/15 bg-[#E8F3EC] px-4 py-1.5 shadow-xs">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#8CC63F] opacity-75" />
@@ -114,7 +112,7 @@ export default function Hero() {
 
             {/* 2. Signature Hook Callout Banner */}
             <motion.div variants={itemVariants} className="mb-4 inline-block">
-              <span className="text-xs font-mono tracking-wider uppercase text-[#0B3B24]/70 bg-white/80 px-3 py-1 rounded-full border border-[#E8F3EC]">
+              <span className="text-xs font-mono tracking-wider uppercase text-[#0B3B24] bg-[#E8F3EC] px-3.5 py-1.5 rounded-full border border-[#8CC63F]/25 font-semibold shadow-xs">
                 {brand.signatureHook}
               </span>
             </motion.div>
@@ -126,11 +124,11 @@ export default function Hero() {
             >
               {brand.hero.headlineLine1} <br />
               {brand.hero.headlineLine2}{" "}
-              <span className="relative inline-block text-[#0B3B24]">
-                <span className="relative z-10 text-[#8CC63F]">{brand.hero.headlineHighlight}</span>
+              <span className="relative inline-block">
+                <span className="relative z-10 text-[#0B3B24]">{brand.hero.headlineHighlight}</span>
                 <span
                   aria-hidden="true"
-                  className="absolute bottom-1 left-0 -z-0 h-3 w-full rounded-full bg-[#8CC63F]/20 sm:h-4"
+                  className="absolute bottom-1 left-0 -z-0 h-3 w-full rounded-full bg-[#8CC63F]/35 sm:bottom-1.5 sm:h-4.5"
                 />
               </span>
             </motion.h1>
@@ -138,7 +136,7 @@ export default function Hero() {
             {/* 4. Editorial Subhead Description */}
             <motion.p
               variants={itemVariants}
-              className="mt-6 max-w-xl text-base leading-relaxed text-[#082A19]/80 sm:text-lg sm:leading-8 font-normal"
+              className="mt-6 max-w-xl text-base leading-relaxed text-[#1B263B]/80 sm:text-lg sm:leading-8 font-normal"
             >
               {brand.hero.description}
             </motion.p>
@@ -156,42 +154,43 @@ export default function Hero() {
                 <ArrowUpRight className="h-4 w-4 text-[#8CC63F] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </Link>
 
-              <button
-                type="button"
-                onClick={() => setShowreelOpen(true)}
-                className="group inline-flex items-center justify-center gap-3 rounded-2xl border-2 border-[#0B3B24]/15 bg-white px-6 py-4 text-sm font-bold text-[#082A19] shadow-sm transition-all duration-300 hover:border-[#8CC63F] hover:bg-[#E8F3EC]/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
+              <a
+                href="https://www.tiktok.com/@nana_creatives"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center justify-center gap-3 rounded-2xl border-2 border-[#0B3B24]/15 bg-white px-6 py-4 text-sm font-bold text-[#0B3B24] shadow-sm transition-all duration-300 hover:border-[#8CC63F] hover:bg-[#E8F3EC]/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
               >
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E8F3EC] text-[#0B3B24] transition-colors group-hover:bg-[#8CC63F] group-hover:text-[#082A19]">
                   <Play className="h-3 w-3 fill-current ml-0.5" />
                 </div>
-                <span>{brand.hero.secondaryCta.label}</span>
-              </button>
+                <span>Watch Showreel</span>
+              </a>
             </motion.div>
 
             {/* 6. The 3 Metric Counters (Zero hardcoded, mapped from BrandProfile) */}
             <motion.div
               variants={itemVariants}
-              className="mt-12 grid grid-cols-3 gap-3 rounded-3xl border border-[#E8F3EC] bg-white/70 p-5 shadow-lg shadow-[#0B3B24]/5 backdrop-blur-md sm:gap-6 sm:p-6"
+              className="mt-10 sm:mt-12 grid grid-cols-3 gap-2.5 sm:gap-6 rounded-3xl border border-[#E8F3EC] bg-white/80 p-4 sm:p-6 shadow-lg shadow-[#0B3B24]/5 backdrop-blur-md"
             >
               {brand.hero.metrics.map((metric, index) => (
                 <div
                   key={metric.id}
                   className={`flex flex-col ${index < brand.hero.metrics.length - 1
-                      ? "border-r border-[#E8F3EC] pr-3 sm:pr-6"
+                      ? "border-r border-[#E8F3EC] pr-2.5 sm:pr-6"
                       : ""
                     }`}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     {getMetricIcon(metric.icon)}
-                    <span className="text-2xl font-black tracking-tight text-[#082A19] sm:text-3xl lg:text-4xl">
+                    <span className="text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#0B3B24]">
                       {metric.value}
                     </span>
                   </div>
-                  <span className="mt-1 text-xs font-bold uppercase tracking-wider text-[#0B3B24]">
+                  <span className="mt-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#0B3B24]/80">
                     {metric.label}
                   </span>
                   {metric.sublabel && (
-                    <span className="mt-0.5 text-[11px] text-[#082A19]/65 hidden sm:block">
+                    <span className="mt-0.5 text-[11px] text-[#1B263B]/60 hidden sm:block">
                       {metric.sublabel}
                     </span>
                   )}
@@ -213,71 +212,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ========================================================= */}
-      {/* SHOWREEL VIDEO MODAL OVERLAY                              */}
-      {/* ========================================================= */}
-      <AnimatePresence>
-        {showreelOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
-            onClick={() => setShowreelOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-white/20 bg-[#082A19] shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#8CC63F]" />
-                  <span className="text-sm font-bold text-white">
-                    Nana Creative • Official Showreel
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowreelOpen(false)}
-                  className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition"
-                  aria-label="Close showreel modal"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              {/* Video Player */}
-              <div className="relative aspect-video w-full bg-black">
-                <video
-                  src="/videos/showreel.mp4"
-                  controls
-                  autoPlay
-                  className="h-full w-full object-contain"
-                >
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-
-              {/* Modal Footer */}
-              <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0B3B24] px-6 py-4 text-xs text-white">
-                <span>&ldquo;{brand.hero.signatureHook}&rdquo;</span>
-                <a
-                  href={`tel:${brand.contact.primaryPhoneTel}`}
-                  className="inline-flex items-center gap-1.5 font-bold text-[#8CC63F] hover:underline"
-                >
-                  <span>Start your project: {brand.contact.primaryPhone}</span>
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </a>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

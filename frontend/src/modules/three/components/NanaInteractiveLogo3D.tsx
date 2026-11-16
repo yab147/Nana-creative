@@ -168,14 +168,16 @@ function createSproutLeafShape(isLeft: boolean): THREE.Shape {
 // 2. SCENE 1: THE STUDIO DIORAMA
 // =========================================================================
 function StudioDiorama({
-  onDioramaClick,
   opacity = 1.0,
+  dioramaMouseRef,
+  robotRightArmRef,
 }: {
-  onDioramaClick: () => void;
   opacity?: number;
+  dioramaMouseRef?: React.RefObject<THREE.Mesh | null>;
+  robotRightArmRef?: React.RefObject<THREE.Group | null>;
 }) {
   return (
-    <group position={[0, -0.5, 0]} onClick={onDioramaClick}>
+    <group position={[0, -0.5, 0]}>
       {/* Diorama Base / Studio Floor (Dark Slate/Charcoal) */}
       <mesh position={[0, -0.08, -0.2]} receiveShadow>
         <boxGeometry args={[4.4, 0.16, 4.0]} />
@@ -275,14 +277,11 @@ function StudioDiorama({
           />
         </mesh>
 
-        {/* Ergonomic Desk Mouse (Clickable) */}
+        {/* Ergonomic Desk Mouse */}
         <mesh
+          ref={dioramaMouseRef}
           position={[0.55, 0.065, 0.16]}
           castShadow
-          onClick={(e) => {
-            e.stopPropagation();
-            onDioramaClick();
-          }}
         >
           <boxGeometry args={[0.13, 0.04, 0.22]} />
           <meshStandardMaterial
@@ -505,16 +504,27 @@ function StudioDiorama({
           />
         </mesh>
 
-        {/* Right Arm reaching to mouse */}
-        <mesh position={[0.28, 0.72, 0.22]} rotation={[0.68, -0.15, 0.2]}>
-          <cylinderGeometry args={[0.06, 0.05, 0.42, 12]} />
-          <meshStandardMaterial
-            color="#1F2937"
-            roughness={0.75}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
+        {/* Right Arm & Hand reaching to mouse */}
+        <group ref={robotRightArmRef} position={[0.28, 0.72, 0.22]} rotation={[0.68, -0.15, 0.2]}>
+          <mesh>
+            <cylinderGeometry args={[0.06, 0.05, 0.42, 12]} />
+            <meshStandardMaterial
+              color="#1F2937"
+              roughness={0.75}
+              transparent
+              opacity={opacity}
+            />
+          </mesh>
+          <mesh position={[0, -0.22, 0.02]} rotation={[-0.2, 0, 0]}>
+            <boxGeometry args={[0.07, 0.04, 0.1]} />
+            <meshStandardMaterial
+              color="#E2B18E"
+              roughness={0.5}
+              transparent
+              opacity={opacity}
+            />
+          </mesh>
+        </group>
       </group>
     </group>
   );
@@ -537,7 +547,7 @@ function LogoRevealScene({
   setIsHovered,
 }: {
   isAligned: boolean;
-  onMouseClick: () => void;
+  onMouseClick?: () => void;
   lettersGroupRefs: React.MutableRefObject<(THREE.Group | null)[]>;
   sparklesGroupRef: React.RefObject<THREE.Group | null>;
   leavesGroupRef: React.RefObject<THREE.Group | null>;
@@ -664,7 +674,7 @@ function LogoRevealScene({
         rotation={[0.22, -0.38, 0.08]}
         onClick={(e) => {
           e.stopPropagation();
-          onMouseClick();
+          onMouseClick?.();
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
@@ -807,13 +817,19 @@ function LogoRevealScene({
 // 4. MAIN INTERACTIVE EXPERIENCE (CAMERA FLY-THROUGH & LOGO REVEAL)
 // =========================================================================
 function CinematicHeroMaster() {
-  const { camera, pointer } = useThree();
+  const { camera, pointer, size } = useThree();
+  const isMobile = size.width < 768;
+  const isSmallMobile = size.width < 480;
 
   // State: whether we are in the initial studio diorama or zoomed into the digital void
   const [isZoomedIn, setIsZoomedIn] = useState(false);
   const [isAligned, setIsAligned] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const isAnimatingRef = useRef(false);
+
+  // References for Scene 1 (Studio Diorama)
+  const dioramaMouseRef = useRef<THREE.Mesh>(null);
+  const robotRightArmRef = useRef<THREE.Group>(null);
 
   // References for Scene 2 (Logo Reveal)
   const mouseGroupRef = useRef<THREE.Group>(null);
@@ -828,7 +844,7 @@ function CinematicHeroMaster() {
   const dioramaOpacityRef = useRef({ value: 1.0 });
 
   // Camera Proxy for GSAP animation
-  // Initial starting wide position: over the man's shoulder looking at the glowing monitor
+  // Initial starting wide position: over the figure's shoulder looking at the glowing monitor
   const cameraProxy = useRef({
     x: 1.75,
     y: 1.35,
@@ -849,7 +865,170 @@ function CinematicHeroMaster() {
     });
   }, []);
 
-  // Set initial letter positions on mount
+  // Automated 3D Cinematic Sequence definition
+  const playAutomatedSequence = () => {
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
+    setIsZoomedIn(true);
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        isAnimatingRef.current = false;
+      },
+    });
+
+    // -------------------------------------------------------------
+    // PHASE 1: Figure automatically animates to "click" the mouse
+    // -------------------------------------------------------------
+    if (robotRightArmRef.current) {
+      tl.to(
+        robotRightArmRef.current.rotation,
+        {
+          x: 0.88,
+          duration: 0.28,
+          ease: "power2.in",
+        },
+        0.2
+      );
+      tl.to(
+        robotRightArmRef.current.rotation,
+        {
+          x: 0.68,
+          duration: 0.22,
+          ease: "power2.out",
+        },
+        0.48
+      );
+    }
+
+    if (dioramaMouseRef.current) {
+      tl.to(
+        dioramaMouseRef.current.scale,
+        {
+          y: 0.65,
+          duration: 0.12,
+          yoyo: true,
+          repeat: 1,
+          ease: "power1.inOut",
+        },
+        0.45
+      );
+    }
+
+    // -------------------------------------------------------------
+    // PHASE 2: Camera flies over shoulder and zooms into monitor screen
+    // -------------------------------------------------------------
+    const targetZ = isSmallMobile ? 7.2 : isMobile ? 6.3 : 5.2;
+
+    tl.to(
+      cameraProxy.current,
+      {
+        x: 0,
+        y: 0.25,
+        z: targetZ,
+        lookX: 0,
+        lookY: 0.25,
+        lookZ: 0,
+        duration: 2.1,
+        ease: "power2.inOut",
+      },
+      0.6
+    );
+
+    // Fade out Diorama as camera passes through the monitor screen into digital void
+    tl.to(
+      dioramaOpacityRef.current,
+      {
+        value: 0.0,
+        duration: 0.8,
+        ease: "power1.in",
+        onUpdate: () => setDioramaOpacity(dioramaOpacityRef.current.value),
+      },
+      1.35
+    );
+
+    // -------------------------------------------------------------
+    // PHASE 3: Reveal deep digital void (#1B263B) and glowing L-shaped stem
+    // -------------------------------------------------------------
+    tl.to(
+      stemMaterial,
+      {
+        emissiveIntensity: 3.5,
+        duration: 0.45,
+        yoyo: true,
+        repeat: 1,
+        ease: "power2.out",
+      },
+      1.7
+    );
+
+    if (sparklesGroupRef.current) {
+      tl.to(
+        sparklesGroupRef.current.scale,
+        {
+          x: 1.85,
+          y: 1.85,
+          z: 1.85,
+          duration: 0.5,
+          yoyo: true,
+          repeat: 1,
+          ease: "power2.out",
+        },
+        1.75
+      );
+    }
+
+    if (leavesGroupRef.current) {
+      tl.to(
+        leavesGroupRef.current.scale,
+        {
+          x: 1.3,
+          y: 1.3,
+          z: 1.3,
+          duration: 0.35,
+          yoyo: true,
+          repeat: 1,
+          ease: "back.out(2)",
+        },
+        1.7
+      );
+    }
+
+    // -------------------------------------------------------------
+    // PHASE 4: Scattered 3D Letters fly together and snap into logo lockup
+    // -------------------------------------------------------------
+    setIsAligned(true);
+    LETTERS_CONFIG.forEach((cfg, index) => {
+      const group = lettersGroupRefs.current[index];
+      if (!group) return;
+
+      tl.to(
+        group.position,
+        {
+          x: cfg.targetPos[0],
+          y: cfg.targetPos[1],
+          z: cfg.targetPos[2],
+          duration: 1.15,
+          ease: "back.out(1.4)",
+        },
+        1.85 + index * 0.038
+      );
+
+      tl.to(
+        group.rotation,
+        {
+          x: 0,
+          y: 0,
+          z: 0,
+          duration: 1.0,
+          ease: "power2.out",
+        },
+        1.85 + index * 0.038
+      );
+    });
+  };
+
+  // Set initial scattered positions and trigger automated sequence on mount
   useEffect(() => {
     LETTERS_CONFIG.forEach((cfg, index) => {
       const group = lettersGroupRefs.current[index];
@@ -858,6 +1037,13 @@ function CinematicHeroMaster() {
         group.rotation.set(...cfg.scatRot);
       }
     });
+
+    // Auto-play smoothly on component mount
+    const timer = setTimeout(() => {
+      playAutomatedSequence();
+    }, 600);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Mouse hover scale feedback
@@ -903,205 +1089,14 @@ function CinematicHeroMaster() {
     }
   });
 
-  // =========================================================================
-  // THE MASTER INTERACTION: FLY-THROUGH INTO MONITOR & LOGO REVEAL
-  // =========================================================================
-  const handleInteraction = () => {
-    if (isAnimatingRef.current) return;
-    isAnimatingRef.current = true;
-
-    const targetZoom = !isZoomedIn;
-    setIsZoomedIn(targetZoom);
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        isAnimatingRef.current = false;
-      },
-    });
-
-    if (targetZoom) {
-      // -------------------------------------------------------------
-      // FORWARD PASS: Fly over shoulder, zoom into monitor, reveal logo
-      // -------------------------------------------------------------
-      // Camera Fly-Through into computer monitor
-      tl.to(
-        cameraProxy.current,
-        {
-          x: 0,
-          y: 0.25,
-          z: 5.2,
-          lookX: 0,
-          lookY: 0.25,
-          lookZ: 0,
-          duration: 2.1,
-          ease: "power2.inOut",
-        },
-        0
-      );
-
-      // Fade out Diorama as camera passes through the monitor glass
-      tl.to(
-        dioramaOpacityRef.current,
-        {
-          value: 0.0,
-          duration: 0.8,
-          ease: "power1.in",
-          onUpdate: () => setDioramaOpacity(dioramaOpacityRef.current.value),
-        },
-        0.75
-      );
-
-      // Trigger Stem Glow & Sparkles surge as we enter digital void
-      tl.to(
-        stemMaterial,
-        {
-          emissiveIntensity: 3.2,
-          duration: 0.45,
-          yoyo: true,
-          repeat: 1,
-          ease: "power2.out",
-        },
-        1.1
-      );
-
-      if (sparklesGroupRef.current) {
-        tl.to(
-          sparklesGroupRef.current.scale,
-          {
-            x: 1.85,
-            y: 1.85,
-            z: 1.85,
-            duration: 0.5,
-            yoyo: true,
-            repeat: 1,
-            ease: "power2.out",
-          },
-          1.15
-        );
-      }
-
-      // Leaves Bloom
-      if (leavesGroupRef.current) {
-        tl.to(
-          leavesGroupRef.current.scale,
-          {
-            x: 1.28,
-            y: 1.28,
-            z: 1.28,
-            duration: 0.26,
-            delay: 0.35,
-            yoyo: true,
-            repeat: 1,
-            ease: "back.out(2)",
-          },
-          1.1
-        );
-      }
-
-      // 3D White Letters fly in and snap flawlessly into L-shape pocket
-      setIsAligned(true);
-      LETTERS_CONFIG.forEach((cfg, index) => {
-        const group = lettersGroupRefs.current[index];
-        if (!group) return;
-
-        tl.to(
-          group.position,
-          {
-            x: cfg.targetPos[0],
-            y: cfg.targetPos[1],
-            z: cfg.targetPos[2],
-            duration: 1.1,
-            ease: "back.out(1.4)",
-          },
-          1.25 + index * 0.038
-        );
-
-        tl.to(
-          group.rotation,
-          {
-            x: 0,
-            y: 0,
-            z: 0,
-            duration: 1.0,
-            ease: "power2.out",
-          },
-          1.25 + index * 0.038
-        );
-      });
-    } else {
-      // -------------------------------------------------------------
-      // REVERSE PASS: Scatter letters, fly camera back out to diorama
-      // -------------------------------------------------------------
-      setIsAligned(false);
-
-      // Scatter letters back out into chaos
-      LETTERS_CONFIG.forEach((cfg, index) => {
-        const group = lettersGroupRefs.current[index];
-        if (!group) return;
-
-        tl.to(
-          group.position,
-          {
-            x: cfg.scatPos[0],
-            y: cfg.scatPos[1],
-            z: cfg.scatPos[2],
-            duration: 0.85,
-            ease: "power2.inOut",
-          },
-          index * 0.02
-        );
-
-        tl.to(
-          group.rotation,
-          {
-            x: cfg.scatRot[0],
-            y: cfg.scatRot[1],
-            z: cfg.scatRot[2],
-            duration: 0.8,
-            ease: "power2.out",
-          },
-          index * 0.02
-        );
-      });
-
-      // Fade Diorama back in
-      tl.to(
-        dioramaOpacityRef.current,
-        {
-          value: 1.0,
-          duration: 0.9,
-          delay: 0.4,
-          ease: "power1.out",
-          onUpdate: () => setDioramaOpacity(dioramaOpacityRef.current.value),
-        },
-        0.3
-      );
-
-      // Camera flies back out of monitor to wide diorama angle
-      tl.to(
-        cameraProxy.current,
-        {
-          x: 1.75,
-          y: 1.35,
-          z: 2.7,
-          lookX: 0,
-          lookY: 0.85,
-          lookZ: -0.5,
-          duration: 1.9,
-          ease: "power2.inOut",
-        },
-        0.2
-      );
-    }
-  };
-
   return (
-    <group onClick={handleInteraction}>
+    <group scale={isSmallMobile ? [0.72, 0.72, 0.72] : isMobile ? [0.84, 0.84, 0.84] : [1, 1, 1]}>
       {/* SCENE 1: STUDIO DIORAMA (Fades out when entering the computer monitor) */}
       {dioramaOpacity > 0.01 && (
         <StudioDiorama
-          onDioramaClick={handleInteraction}
           opacity={dioramaOpacity}
+          dioramaMouseRef={dioramaMouseRef}
+          robotRightArmRef={robotRightArmRef}
         />
       )}
 
@@ -1109,7 +1104,6 @@ function CinematicHeroMaster() {
       <group visible={isZoomedIn || dioramaOpacity < 0.9}>
         <LogoRevealScene
           isAligned={isAligned}
-          onMouseClick={handleInteraction}
           lettersGroupRefs={lettersGroupRefs}
           sparklesGroupRef={sparklesGroupRef}
           leavesGroupRef={leavesGroupRef}
@@ -1133,7 +1127,7 @@ export interface NanaInteractiveLogo3DProps {
 }
 
 export function NanaInteractiveLogo3D({
-  className = "h-[540px] md:h-[660px] w-full",
+  className = "h-[400px] sm:h-[500px] lg:h-[620px] w-full",
 }: NanaInteractiveLogo3DProps) {
   return (
     <div
