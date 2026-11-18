@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { nanaContactContent } from "@/data/nanaContent";
+import apiClient from "@/services/apiClient";
+import { CreateContactDto, ContactResponseDto } from "@/types/api.types";
 import {
   Phone,
   Mail,
@@ -11,22 +14,106 @@ import {
   Sparkles,
   ArrowUpRight,
   Clock,
+  Loader2,
+  AlertCircle,
+  RotateCcw,
 } from "lucide-react";
 
 export default function ContactPage() {
   const contact = nanaContactContent;
-  const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
+
+  const initialFormState: CreateContactDto = {
     name: "",
     phone: "",
-    company: "",
+    companyName: "",
     service: "Commercial Video Production",
     message: "",
-  });
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formData, setFormData] = useState<CreateContactDto>(initialFormState);
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof CreateContactDto, string>>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submittedResponse, setSubmittedResponse] = useState<ContactResponseDto | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const validateForm = (): boolean => {
+    const errors: Partial<Record<keyof CreateContactDto, string>> = {};
+
+    if (!formData.name.trim() || formData.name.trim().length < 2) {
+      errors.name = "Full name is required (minimum 2 characters).";
+    }
+
+    const cleanPhone = formData.phone.replace(/[\s\-()]/g, "");
+    if (!cleanPhone || cleanPhone.length < 8) {
+      errors.phone = "Valid phone number is required (at least 8 digits).";
+    }
+
+    if (!formData.companyName.trim() || formData.companyName.trim().length < 2) {
+      errors.companyName = "Company, organization, or brand name is required.";
+    }
+
+    if (!formData.service.trim()) {
+      errors.service = "Please select a primary service needed.";
+    }
+
+    if (!formData.message.trim() || formData.message.trim().length < 10) {
+      errors.message = "Project vision or message must be at least 10 characters.";
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleInputChange = (
+    field: keyof CreateContactDto,
+    value: string
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // Clear field error on change
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+    if (errorMessage) {
+      setErrorMessage(null);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await apiClient.contacts.createContact(formData);
+      setSubmittedResponse(response);
+      setSubmitSuccess(true);
+      // Reset form fields back to blank defaults
+      setFormData(initialFormState);
+      setFieldErrors({});
+    } catch (err: unknown) {
+      console.error("[ContactPage] Submission failed:", err);
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "We encountered an issue submitting your inquiry. Please try again or reach out directly via our hotline.";
+      setErrorMessage(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleReset = () => {
+    setSubmitSuccess(false);
+    setSubmittedResponse(null);
+    setErrorMessage(null);
+    setFormData(initialFormState);
+    setFieldErrors({});
   };
 
   return (
@@ -122,7 +209,7 @@ export default function ContactPage() {
                     {contact.locations}
                   </p>
                   <p className="mt-0.5 text-xs text-[#1B263B]/60">
-                    Dual headquarters & on-location production crew
+                    Dual headquarters &amp; on-location production crew
                   </p>
                 </div>
               </div>
@@ -164,124 +251,242 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Right Column: Interactive Consultation Inquiry Form */}
+          {/* Right Column: Live Interactive Consultation Inquiry Form */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl border border-[#E8F3EC] bg-white p-6 sm:p-8 lg:p-10 shadow-xl shadow-[#0B3B24]/5">
-              <h2 className="text-2xl font-bold tracking-tight text-[#0B3B24]">
-                Schedule Brand Discovery
-              </h2>
-              <p className="mt-1 text-sm text-[#1B263B]/70">
-                Tell us about your brand goals. Our team will respond within 24 hours.
-              </p>
-
-              {submitted ? (
-                <div className="mt-8 rounded-2xl bg-[#E8F3EC] p-8 text-center border border-[#8CC63F]/40 animate-in fade-in duration-300">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#0B3B24] text-[#8CC63F] mb-4">
-                    <CheckCircle2 className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#0B3B24]">
-                    Message Sent Successfully
-                  </h3>
-                  <p className="mt-2 text-sm text-[#082A19]/80 max-w-md mx-auto">
-                    Thank you, {formData.name || "partner"}! Our team in {contact.locations} has received your inquiry and will reach out shortly.
+            <div className="rounded-3xl border border-[#E8F3EC] bg-white p-6 sm:p-8 lg:p-10 shadow-xl shadow-[#0B3B24]/5 relative">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight text-[#0B3B24]">
+                    Schedule Brand Discovery
+                  </h2>
+                  <p className="mt-1 text-sm text-[#1B263B]/70">
+                    Tell us about your brand goals. Our team will review your requirements and respond within 24 hours.
                   </p>
                 </div>
+                <div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E8F3EC] text-[#0B3B24]">
+                  <Send className="h-4 w-4" />
+                </div>
+              </div>
+
+              {/* Toast Error Banner */}
+              <AnimatePresence>
+                {errorMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mt-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/80 p-4 text-xs sm:text-sm text-red-900"
+                  >
+                    <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-red-800">Inquiry Submission Failed</p>
+                      <p className="mt-0.5 text-red-700/90">{errorMessage}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setErrorMessage(null)}
+                      className="text-red-500 hover:text-red-700 font-bold px-1"
+                    >
+                      ✕
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Success View */}
+              {submitSuccess ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-8 rounded-2xl bg-[#E8F3EC] p-8 text-center border border-[#8CC63F]/40 shadow-xs"
+                >
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#0B3B24] text-[#8CC63F] mb-4 shadow-md">
+                    <CheckCircle2 className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-2xl font-black text-[#0B3B24]">
+                    Discovery Inquiry Received!
+                  </h3>
+                  <p className="mt-2 text-sm text-[#082A19]/80 max-w-md mx-auto leading-relaxed">
+                    Thank you, <span className="font-semibold text-[#0B3B24]">{submittedResponse?.name || "partner"}</span>! Your inquiry has been securely routed to our creative directors in {contact.locations}.
+                  </p>
+
+                  {submittedResponse?.id && (
+                    <div className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white/70 px-4 py-2 border border-[#8CC63F]/30 text-xs font-mono text-[#0B3B24]">
+                      <span>Reference ID:</span>
+                      <span className="font-bold text-[#1B263B]">{submittedResponse.id.slice(0, 8)}...</span>
+                    </div>
+                  )}
+
+                  <div className="mt-6 pt-6 border-t border-[#8CC63F]/20 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#0B3B24] px-6 py-3 text-xs font-bold text-white transition-all hover:bg-[#082A19] hover:shadow-md"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5 text-[#8CC63F]" />
+                      <span>Submit Another Inquiry</span>
+                    </button>
+                  </div>
+                </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                <form onSubmit={handleSubmit} className="mt-8 space-y-5" noValidate>
+                  {/* Name & Phone Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-[#0B3B24] mb-2">
-                        Your Full Name *
+                        Your Full Name <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
-                        required
+                        disabled={isSubmitting}
                         value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
+                        onChange={(e) => handleInputChange("name", e.target.value)}
                         placeholder="e.g. Dawit Bekele"
-                        className="w-full rounded-xl border border-[#E8F3EC] bg-[#F7F9F8] px-4 py-3 text-sm text-[#1B263B] placeholder-[#1B263B]/40 focus:border-[#8CC63F] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#8CC63F]"
+                        className={`w-full rounded-xl border px-4 py-3 text-sm text-[#1B263B] placeholder-[#1B263B]/40 transition-colors focus:bg-white focus:outline-none focus:ring-1 ${
+                          fieldErrors.name
+                            ? "border-red-400 bg-red-50/30 focus:border-red-500 focus:ring-red-500"
+                            : "border-[#E8F3EC] bg-[#F7F9F8] focus:border-[#8CC63F] focus:ring-[#8CC63F]"
+                        }`}
                       />
+                      {fieldErrors.name && (
+                        <p className="mt-1 text-xs text-red-600 font-medium">
+                          {fieldErrors.name}
+                        </p>
+                      )}
                     </div>
+
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-[#0B3B24] mb-2">
-                        Phone Number *
+                        Phone Number <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="tel"
-                        required
+                        disabled={isSubmitting}
                         value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
-                        }
-                        placeholder="09..."
-                        className="w-full rounded-xl border border-[#E8F3EC] bg-[#F7F9F8] px-4 py-3 text-sm text-[#1B263B] placeholder-[#1B263B]/40 focus:border-[#8CC63F] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#8CC63F]"
+                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        placeholder="+251 91 123 4567"
+                        className={`w-full rounded-xl border px-4 py-3 text-sm text-[#1B263B] placeholder-[#1B263B]/40 transition-colors focus:bg-white focus:outline-none focus:ring-1 ${
+                          fieldErrors.phone
+                            ? "border-red-400 bg-red-50/30 focus:border-red-500 focus:ring-red-500"
+                            : "border-[#E8F3EC] bg-[#F7F9F8] focus:border-[#8CC63F] focus:ring-[#8CC63F]"
+                        }`}
                       />
+                      {fieldErrors.phone && (
+                        <p className="mt-1 text-xs text-red-600 font-medium">
+                          {fieldErrors.phone}
+                        </p>
+                      )}
                     </div>
                   </div>
 
+                  {/* Company & Service Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-[#0B3B24] mb-2">
-                        Company or Brand Name
+                        Company or Organization <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
-                        value={formData.company}
-                        onChange={(e) =>
-                          setFormData({ ...formData, company: e.target.value })
-                        }
+                        disabled={isSubmitting}
+                        value={formData.companyName}
+                        onChange={(e) => handleInputChange("companyName", e.target.value)}
                         placeholder="e.g. Free Spring Water"
-                        className="w-full rounded-xl border border-[#E8F3EC] bg-[#F7F9F8] px-4 py-3 text-sm text-[#1B263B] placeholder-[#1B263B]/40 focus:border-[#8CC63F] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#8CC63F]"
+                        className={`w-full rounded-xl border px-4 py-3 text-sm text-[#1B263B] placeholder-[#1B263B]/40 transition-colors focus:bg-white focus:outline-none focus:ring-1 ${
+                          fieldErrors.companyName
+                            ? "border-red-400 bg-red-50/30 focus:border-red-500 focus:ring-red-500"
+                            : "border-[#E8F3EC] bg-[#F7F9F8] focus:border-[#8CC63F] focus:ring-[#8CC63F]"
+                        }`}
                       />
+                      {fieldErrors.companyName && (
+                        <p className="mt-1 text-xs text-red-600 font-medium">
+                          {fieldErrors.companyName}
+                        </p>
+                      )}
                     </div>
+
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-[#0B3B24] mb-2">
-                        Primary Service Needed
+                        Primary Service Needed <span className="text-red-500">*</span>
                       </label>
                       <select
+                        disabled={isSubmitting}
                         value={formData.service}
-                        onChange={(e) =>
-                          setFormData({ ...formData, service: e.target.value })
-                        }
-                        className="w-full rounded-xl border border-[#E8F3EC] bg-[#F7F9F8] px-4 py-3 text-sm text-[#1B263B] focus:border-[#8CC63F] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#8CC63F]"
+                        onChange={(e) => handleInputChange("service", e.target.value)}
+                        className={`w-full rounded-xl border px-4 py-3 text-sm text-[#1B263B] transition-colors focus:bg-white focus:outline-none focus:ring-1 ${
+                          fieldErrors.service
+                            ? "border-red-400 bg-red-50/30 focus:border-red-500 focus:ring-red-500"
+                            : "border-[#E8F3EC] bg-[#F7F9F8] focus:border-[#8CC63F] focus:ring-[#8CC63F]"
+                        }`}
                       >
                         <option value="Commercial Video Production">
                           Commercial Video Production
                         </option>
-                        <option value="Digital Marketing">Digital Marketing</option>
+                        <option value="Social Media Marketing">
+                          Social Media Marketing
+                        </option>
+                        <option value="Branding &amp; Visual Identity">
+                          Branding &amp; Visual Identity
+                        </option>
                         <option value="Performance Paid Advertising">
                           Performance Paid Advertising
                         </option>
-                        <option value="Creative Strategy & Market Research">
-                          Creative Strategy & Market Research
+                        <option value="SEO &amp; Web Development">
+                          SEO &amp; Web Development
+                        </option>
+                        <option value="Creative Strategy &amp; Market Research">
+                          Creative Strategy &amp; Market Research
                         </option>
                       </select>
+                      {fieldErrors.service && (
+                        <p className="mt-1 text-xs text-red-600 font-medium">
+                          {fieldErrors.service}
+                        </p>
+                      )}
                     </div>
                   </div>
 
+                  {/* Message / Project Vision */}
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-[#0B3B24] mb-2">
-                      Project Vision / Requirements
+                      Project Vision / Requirements <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       rows={4}
+                      disabled={isSubmitting}
                       value={formData.message}
-                      onChange={(e) =>
-                        setFormData({ ...formData, message: e.target.value })
-                      }
-                      placeholder="Tell us about your brand timeline, current challenges, or goals..."
-                      className="w-full rounded-xl border border-[#E8F3EC] bg-[#F7F9F8] px-4 py-3 text-sm text-[#1B263B] placeholder-[#1B263B]/40 focus:border-[#8CC63F] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#8CC63F]"
+                      onChange={(e) => handleInputChange("message", e.target.value)}
+                      placeholder="Tell us about your brand timeline, campaign goals, or commercial targets..."
+                      className={`w-full rounded-xl border px-4 py-3 text-sm text-[#1B263B] placeholder-[#1B263B]/40 transition-colors focus:bg-white focus:outline-none focus:ring-1 ${
+                        fieldErrors.message
+                          ? "border-red-400 bg-red-50/30 focus:border-red-500 focus:ring-red-500"
+                          : "border-[#E8F3EC] bg-[#F7F9F8] focus:border-[#8CC63F] focus:ring-[#8CC63F]"
+                      }`}
                     />
+                    {fieldErrors.message && (
+                      <p className="mt-1 text-xs text-red-600 font-medium">
+                        {fieldErrors.message}
+                      </p>
+                    )}
                   </div>
 
+                  {/* Submit Button */}
                   <button
                     type="submit"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0B3B24] px-8 py-4 text-sm font-bold text-white shadow-xl shadow-[#0B3B24]/15 transition-all hover:bg-[#082A19] hover:shadow-2xl hover:shadow-[#0B3B24]/25 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
+                    disabled={isSubmitting}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0B3B24] px-8 py-4 text-sm font-bold text-white shadow-xl shadow-[#0B3B24]/15 transition-all hover:bg-[#082A19] hover:shadow-2xl hover:shadow-[#0B3B24]/25 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F] disabled:opacity-60 disabled:pointer-events-none disabled:transform-none"
                   >
-                    <span>Send Discovery Request</span>
-                    <Send className="h-4 w-4 text-[#8CC63F]" />
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin text-[#8CC63F]" />
+                        <span>Transmitting Discovery Request...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Send Discovery Request</span>
+                        <Send className="h-4 w-4 text-[#8CC63F]" />
+                      </>
+                    )}
                   </button>
                 </form>
               )}

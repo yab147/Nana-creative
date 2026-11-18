@@ -50,3 +50,46 @@ export interface BlogPostWithMeta extends BlogPost {
   readTimeMinutes: number;
   formattedDate: string;
 }
+
+/**
+ * AI Chat DTOs
+ * Endpoint: POST /chat
+ */
+export interface ChatRequestDto {
+  message: string;
+}
+
+export interface ChatResponseDto {
+  status: string;
+  reply: string;
+}
+
+/**
+ * Contact / Request DTOs
+ * Endpoint: POST /contacts, GET /contacts, GET /contacts/{id}
+ */
+export interface CreateContactDto {
+  name: string;
+  phone: string;
+  companyName: string;
+  service: string;
+  message: string;
+}
+
+export interface ContactResponseDto {
+  id: string;
+  name: string;
+  phone: string;
+  companyName: string;
+  service: string;
+  message: string;
+  createdAt: string;
+}
+
+export interface UpdateContactDto {
+  name?: string;
+  phone?: string;
+  companyName?: string;
+  service?: string;
+  message?: string;
+}

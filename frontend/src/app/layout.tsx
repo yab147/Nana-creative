@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 };
 
 import Footer from "@/components/website/Footer";
+import NanaAiChat from "@/components/chat/NanaAiChat";
 
 export default function RootLayout({
   children,
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-white text-[#082A19] antialiased">
         <div className="flex-1 flex flex-col">{children}</div>
         <Footer />
+        <NanaAiChat />
       </body>
     </html>
   );

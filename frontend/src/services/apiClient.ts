@@ -1,4 +1,10 @@
-import { BlogPost } from "@/types/api.types";
+import {
+  BlogPost,
+  ChatRequestDto,
+  ChatResponseDto,
+  CreateContactDto,
+  ContactResponseDto,
+} from "@/types/api.types";
 
 const FALLBACK_API_URL = "https://nana-backend-2jvy.onrender.com";
 
@@ -145,6 +151,73 @@ export const blogApi = {
     }
   },
 };
+ 
+/**
+ * AI Assistant Chat API service methods executing against Swagger backend:
+ * POST /chat
+ */
+export const chatApi = {
+  /**
+   * Send a question/prompt to Nana Creatives AI assistant
+   */
+  async sendMessage(message: string): Promise<ChatResponseDto> {
+    const payload: ChatRequestDto = { message: message.trim() };
+    return await apiFetch<ChatResponseDto>("/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
+  },
+};
+
+/**
+ * Contact & Discovery Inquiries API service methods executing against Swagger backend:
+ * POST /contacts, GET /contacts, GET /contacts/{id}
+ */
+export const contactsApi = {
+  /**
+   * Submit a new discovery/contact inquiry
+   */
+  async createContact(dto: CreateContactDto): Promise<ContactResponseDto> {
+    const payload: CreateContactDto = {
+      name: dto.name.trim(),
+      phone: dto.phone.trim(),
+      companyName: dto.companyName.trim(),
+      service: dto.service.trim(),
+      message: dto.message.trim(),
+    };
+
+    return await apiFetch<ContactResponseDto>("/contacts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
+  },
+
+  /**
+   * Retrieve all contact inquiries (admin/editorial)
+   */
+  async getAllContacts(): Promise<ContactResponseDto[]> {
+    return await apiFetch<ContactResponseDto[]>("/contacts", {
+      cache: "no-store",
+    });
+  },
+
+  /**
+   * Retrieve a single contact inquiry by UUID
+   */
+  async getContactById(id: string): Promise<ContactResponseDto> {
+    return await apiFetch<ContactResponseDto>(`/contacts/${encodeURIComponent(id)}`, {
+      cache: "no-store",
+    });
+  },
+};
 
 /**
  * Central API Client interface
@@ -152,6 +225,8 @@ export const blogApi = {
 export const apiClient = {
   blog: blogApi,
   posts: blogApi,
+  chat: chatApi,
+  contacts: contactsApi,
   baseUrl: API_BASE_URL,
 };
 
