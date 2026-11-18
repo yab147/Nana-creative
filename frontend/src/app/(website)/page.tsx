@@ -31,7 +31,7 @@ const pageModules = [
   },
   {
     title: "Editorial & Intelligence",
-    badge: "Swagger Live",
+    badge: "Fresh Dispatches",
     description:
       "Read our latest playbooks, engineering dispatches, and cinema production breakdowns.",
     href: "/blog",

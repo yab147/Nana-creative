@@ -50,13 +50,13 @@ export default async function BlogPage() {
               In-depth playbooks, engineering insights, and field reports on cinema-grade video, high-retention social scaling, and relentless commercial growth.
             </p>
 
-            <div className="mt-8 flex items-center gap-4 text-xs font-mono text-[#0B3B24]">
-              <span className="inline-flex items-center gap-1.5">
+            <div className="mt-8 flex items-center gap-3 text-xs font-medium text-[#0B3B24]">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#E8F3EC] px-3.5 py-1.5 font-semibold text-[#0B3B24]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#8CC63F]" />
-                Live Swagger API Connected
+                Editorial Intelligence
               </span>
-              <span>•</span>
-              <span>{posts.length} {posts.length === 1 ? "Article" : "Articles"} Available</span>
+              <span className="text-[#1B263B]/30">•</span>
+              <span className="text-[#1B263B]/70">{posts.length} {posts.length === 1 ? "Article" : "Articles"} Published</span>
             </div>
           </div>
         </div>
@@ -66,15 +66,14 @@ export default async function BlogPage() {
       <section className="py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           {fetchError && posts.length === 0 ? (
-            <div className="mx-auto max-w-xl rounded-3xl border border-amber-200 bg-amber-50/50 p-8 text-center text-amber-900">
-              <Newspaper className="mx-auto mb-3 h-8 w-8 text-amber-600" />
-              <h3 className="text-lg font-bold">Connecting to Backend Dispatch Service...</h3>
-              <p className="mt-2 text-sm text-amber-800/80">
-                The live API instance is warming up or temporarily unreachable.
-              </p>
-              <div className="mt-4 font-mono text-xs text-amber-700/60 break-all bg-white/70 p-3 rounded-lg border border-amber-200">
-                {fetchError}
+            <div className="mx-auto max-w-xl rounded-3xl border border-[#E8F3EC] bg-[#F7F9F8] p-8 sm:p-12 text-center text-[#1B263B]">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E8F3EC] text-[#0B3B24]">
+                <Newspaper className="h-7 w-7 text-[#0B3B24]" />
               </div>
+              <h3 className="text-lg font-bold text-[#0B3B24]">Editorial Dispatches Updating</h3>
+              <p className="mt-2 text-sm text-[#1B263B]/70 max-w-md mx-auto">
+                Our latest strategic articles and production insights are being curated. Please check back shortly.
+              </p>
             </div>
           ) : (
             <BlogGrid posts={posts} />
