@@ -30,7 +30,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9F8] py-14 lg:py-20 text-[#1B263B]">
+    <div className="min-h-screen bg-[#F7F9F8] py-10 sm:py-16 lg:py-20 text-[#1B263B]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Header */}
         <div className="mb-14 max-w-2xl">
@@ -45,16 +45,16 @@ export default function ContactPage() {
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-[#0B3B24] lowercase">
             {contact.hook}
           </h1>
-          <p className="mt-4 text-lg sm:text-xl text-[#1B263B]/75 font-light leading-relaxed">
+          <p className="mt-4 text-base sm:text-lg lg:text-xl text-[#1B263B]/75 font-light leading-relaxed">
             {contact.subhook}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
           {/* Left Column: Direct Contact & Info Cards */}
           <div className="lg:col-span-5 space-y-6">
             {/* Primary Hotline Card */}
-            <div className="overflow-hidden rounded-3xl bg-[#0B3B24] p-8 text-white shadow-xl shadow-[#0B3B24]/10 border border-[#8CC63F]/25">
+            <div className="overflow-hidden rounded-3xl bg-[#0B3B24] p-6 sm:p-8 text-white shadow-xl shadow-[#0B3B24]/10 border border-[#8CC63F]/25">
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#8CC63F]">
                 <Clock className="h-4 w-4" />
                 <span>{contact.availability}</span>
@@ -109,7 +109,7 @@ export default function ContactPage() {
             </div>
 
             {/* Locations & Social */}
-            <div className="rounded-3xl border border-[#E8F3EC] bg-white p-8 shadow-sm space-y-6">
+            <div className="rounded-3xl border border-[#E8F3EC] bg-white p-6 sm:p-8 shadow-sm space-y-6">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#E8F3EC]">
                   <MapPin className="h-5 w-5 text-[#0B3B24]" />
@@ -166,7 +166,7 @@ export default function ContactPage() {
 
           {/* Right Column: Interactive Consultation Inquiry Form */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl border border-[#E8F3EC] bg-white p-8 sm:p-10 shadow-xl shadow-[#0B3B24]/5">
+            <div className="rounded-3xl border border-[#E8F3EC] bg-white p-6 sm:p-8 lg:p-10 shadow-xl shadow-[#0B3B24]/5">
               <h2 className="text-2xl font-bold tracking-tight text-[#0B3B24]">
                 Schedule Brand Discovery
               </h2>

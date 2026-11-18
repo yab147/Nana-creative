@@ -32,11 +32,11 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-[#E8F3EC] bg-white/95 backdrop-blur-xl transition-all">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3.5">
+      <header className="sticky top-0 z-40 w-full border-b border-[#E8F3EC]/80 bg-white/80 backdrop-blur-md transition-all">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3 sm:py-3.5">
           {/* Brand Logo & Wordmark */}
           <Link href="/" className="group flex items-center gap-3 min-h-[44px]">
-            <div className="relative h-11 w-11 overflow-hidden rounded-full ring-2 ring-[#0B3B24]/10 shadow-sm transition-transform duration-300 group-hover:scale-105">
+            <div className="relative h-10 w-10 sm:h-11 sm:w-11 overflow-hidden rounded-full ring-2 ring-[#0B3B24]/10 shadow-sm transition-transform duration-300 group-hover:scale-105">
               <Image
                 src="/images/logo.png"
                 alt="Nana Creative Logo"
@@ -47,18 +47,18 @@ export default function Navbar() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-extrabold tracking-tight text-[#082A19] group-hover:text-[#0B3B24] transition-colors">
+              <span className="text-base sm:text-lg font-extrabold tracking-tight text-[#082A19] group-hover:text-[#0B3B24] transition-colors">
                 Nana Creative
                 <span className="text-[#8CC63F]">.</span>
               </span>
-              <span className="text-[10px] font-bold tracking-widest uppercase text-[#0B3B24]/60">
+              <span className="text-[9px] sm:text-[10px] font-bold tracking-widest uppercase text-[#0B3B24]/60">
                 Creative Agency
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links (Strict order: Home, About, Portfolio, Partnership, Analytics, Blog, Contact) */}
-          <div className="hidden items-center gap-1 lg:flex bg-[#F7F9F8] p-1.5 rounded-full border border-[#E8F3EC]">
+          {/* Desktop Navigation Links (Visible on md and above: >= 768px) */}
+          <div className="hidden items-center gap-1 md:flex bg-[#F7F9F8]/90 p-1 lg:p-1.5 rounded-full border border-[#E8F3EC]/80 backdrop-blur-sm">
             {nanaNavigationItems.map((item) => {
               const isActive =
                 pathname === item.href ||
@@ -67,7 +67,7 @@ export default function Navbar() {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className={`relative px-4 py-2 text-xs font-semibold tracking-wide rounded-full transition-all duration-200 ${
+                  className={`relative px-2.5 lg:px-4 py-1.5 lg:py-2 text-[11px] lg:text-xs font-semibold tracking-wide rounded-full transition-all duration-200 ${
                     isActive
                       ? "bg-[#0B3B24] text-white shadow-sm"
                       : "text-[#1B263B]/80 hover:text-[#0B3B24] hover:bg-white"
@@ -75,7 +75,7 @@ export default function Navbar() {
                 >
                   <span>{item.name}</span>
                   {item.badge && (
-                    <span className="ml-1.5 inline-flex items-center rounded-full bg-[#8CC63F]/25 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#0B3B24]">
+                    <span className="ml-1.5 hidden xl:inline-flex items-center rounded-full bg-[#8CC63F]/25 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#0B3B24]">
                       {item.badge}
                     </span>
                   )}
@@ -86,10 +86,10 @@ export default function Navbar() {
 
           {/* Right Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Quick Call Button (Visible on all viewports for direct conversion) */}
+            {/* Quick Call Button */}
             <a
               href={`tel:${nanaContactContent.phoneTel}`}
-              className="inline-flex items-center gap-2 rounded-full bg-[#0B3B24] px-3.5 sm:px-5 py-2.5 min-h-[44px] text-xs font-bold text-white shadow-md shadow-[#0B3B24]/15 transition-all duration-300 hover:bg-[#082A19] hover:shadow-lg hover:shadow-[#0B3B24]/25 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#0B3B24] px-3.5 sm:px-5 py-2 sm:py-2.5 min-h-[40px] sm:min-h-[44px] text-xs font-bold text-white shadow-md shadow-[#0B3B24]/15 transition-all duration-300 hover:bg-[#082A19] hover:shadow-lg hover:shadow-[#0B3B24]/25 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
               aria-label="Call Nana Creative"
             >
               <Phone className="h-3.5 w-3.5 text-[#8CC63F]" />
@@ -97,11 +97,11 @@ export default function Navbar() {
               <ArrowUpRight className="hidden sm:inline h-3.5 w-3.5 text-[#8CC63F]" />
             </a>
 
-            {/* Mobile Hamburger Menu Button (Touch-Friendly min 44px) */}
+            {/* Mobile Hamburger Menu Button (Touch-Friendly min 44px, visible on < md) */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[#E8F3EC] bg-white text-[#082A19] shadow-xs transition hover:bg-[#F7F9F8] lg:hidden focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
+              className="flex h-10 w-10 sm:h-11 sm:w-11 min-h-[40px] min-w-[40px] items-center justify-center rounded-full border border-[#E8F3EC] bg-white text-[#082A19] shadow-xs transition hover:bg-[#F7F9F8] md:hidden focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
               aria-label="Open mobile navigation menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -114,7 +114,7 @@ export default function Navbar() {
       {/* Robust Direct-DOM Mobile Slide-Out Drawer (Zero portal race conditions, full touch-event safety) */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 flex justify-end lg:hidden">
+          <div className="fixed inset-0 z-50 flex justify-end md:hidden">
             {/* Dimmed Blurred Backdrop (z-0, clicks dismiss the menu) */}
             <motion.div
               initial={{ opacity: 0 }}

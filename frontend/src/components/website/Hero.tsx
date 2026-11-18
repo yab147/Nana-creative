@@ -59,20 +59,20 @@ export default function Hero() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1,
+        staggerChildren: 0.1,
+        delayChildren: 0.08,
       },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: "easeOut",
+        duration: 0.75,
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
@@ -80,14 +80,14 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-[calc(100svh-120px)] overflow-hidden bg-radial from-[#F7F9F8] via-[#FFFFFF] to-[#F7F9F8] py-8 lg:py-14"
+      className="relative min-h-[calc(100svh-110px)] overflow-hidden bg-radial from-[#F7F9F8] via-[#FFFFFF] to-[#F7F9F8] py-8 sm:py-12 lg:py-16"
     >
       {/* Editorial Decorative Background Halos */}
       <div className="pointer-events-none absolute -top-40 right-0 h-[640px] w-[640px] rounded-full bg-[#8CC63F]/10 blur-[130px]" />
       <div className="pointer-events-none absolute bottom-0 left-[-10%] h-[500px] w-[500px] rounded-full bg-[#E8F3EC]/70 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
           {/* ========================================================= */}
           {/* LEFT COLUMN: Editorial Copy, Signature Hook, Dual CTAs & Stats */}
           {/* ========================================================= */}
@@ -98,13 +98,13 @@ export default function Hero() {
             animate="visible"
           >
             {/* 1. Live Status Pill */}
-            <motion.div variants={itemVariants} className="mb-5 flex flex-wrap items-center gap-2">
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-[#0B3B24]/15 bg-[#E8F3EC] px-4 py-1.5 shadow-xs">
+            <motion.div variants={itemVariants} className="mb-4 sm:mb-5 flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-[#0B3B24]/15 bg-[#E8F3EC]/90 px-3.5 sm:px-4 py-1.5 shadow-xs backdrop-blur-sm">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#8CC63F] opacity-75" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#8CC63F]" />
                 </span>
-                <span className="text-xs font-bold text-[#0B3B24]">
+                <span className="text-[11px] sm:text-xs font-bold text-[#0B3B24]">
                   {brand.hero.statusBadge}
                 </span>
               </div>
@@ -112,23 +112,23 @@ export default function Hero() {
 
             {/* 2. Signature Hook Callout Banner */}
             <motion.div variants={itemVariants} className="mb-4 inline-block">
-              <span className="text-xs font-mono tracking-wider uppercase text-[#0B3B24] bg-[#E8F3EC] px-3.5 py-1.5 rounded-full border border-[#8CC63F]/25 font-semibold shadow-xs">
+              <span className="text-[11px] sm:text-xs font-mono tracking-wider uppercase text-[#0B3B24] bg-[#E8F3EC]/90 px-3.5 py-1.5 rounded-full border border-[#8CC63F]/25 font-semibold shadow-xs backdrop-blur-sm">
                 {brand.signatureHook}
               </span>
             </motion.div>
 
-            {/* 3. Editorial H1 Headline */}
+            {/* 3. Editorial H1 Headline (Responsive: text-3xl on mobile, sm:text-5xl, lg:text-7xl) */}
             <motion.h1
               variants={itemVariants}
-              className="text-4xl font-extrabold tracking-tight text-[#082A19] sm:text-6xl lg:text-7xl leading-[1.08]"
+              className="text-3xl font-extrabold tracking-tight text-[#082A19] sm:text-5xl lg:text-7xl leading-[1.1] sm:leading-[1.08]"
             >
-              {brand.hero.headlineLine1} <br />
+              {brand.hero.headlineLine1} <br className="hidden sm:inline" />
               {brand.hero.headlineLine2}{" "}
               <span className="relative inline-block">
                 <span className="relative z-10 text-[#0B3B24]">{brand.hero.headlineHighlight}</span>
                 <span
                   aria-hidden="true"
-                  className="absolute bottom-1 left-0 -z-0 h-3 w-full rounded-full bg-[#8CC63F]/35 sm:bottom-1.5 sm:h-4.5"
+                  className="absolute bottom-1 left-0 -z-0 h-2.5 w-full rounded-full bg-[#8CC63F]/35 sm:bottom-1.5 sm:h-4.5"
                 />
               </span>
             </motion.h1>
@@ -136,19 +136,19 @@ export default function Hero() {
             {/* 4. Editorial Subhead Description */}
             <motion.p
               variants={itemVariants}
-              className="mt-6 max-w-xl text-base leading-relaxed text-[#1B263B]/80 sm:text-lg sm:leading-8 font-normal"
+              className="mt-4 sm:mt-6 max-w-xl text-sm leading-relaxed text-[#1B263B]/80 sm:text-lg sm:leading-8 font-normal"
             >
               {brand.hero.description}
             </motion.p>
 
-            {/* 5. Dual CTAs */}
+            {/* 5. Dual CTAs (Stack on mobile, row on tablet/desktop) */}
             <motion.div
               variants={itemVariants}
-              className="mt-8 flex flex-wrap items-center gap-4 sm:gap-5"
+              className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-5"
             >
               <Link
                 href={brand.hero.primaryCta.href}
-                className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-[#0B3B24] px-7 py-4 text-sm font-bold text-white shadow-xl shadow-[#0B3B24]/20 transition-all duration-300 hover:bg-[#082A19] hover:shadow-2xl hover:shadow-[#0B3B24]/30 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
+                className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-[#0B3B24] px-6 sm:px-7 py-3.5 sm:py-4 text-sm font-bold text-white shadow-xl shadow-[#0B3B24]/20 transition-all duration-300 hover:bg-[#082A19] hover:shadow-2xl hover:shadow-[#0B3B24]/30 hover:-translate-y-1 active:scale-98 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
               >
                 <span>{brand.hero.primaryCta.label}</span>
                 <ArrowUpRight className="h-4 w-4 text-[#8CC63F] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -158,7 +158,7 @@ export default function Hero() {
                 href="https://www.tiktok.com/@nana_creatives"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center gap-3 rounded-2xl border-2 border-[#0B3B24]/15 bg-white px-6 py-4 text-sm font-bold text-[#0B3B24] shadow-sm transition-all duration-300 hover:border-[#8CC63F] hover:bg-[#E8F3EC]/40 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
+                className="group inline-flex items-center justify-center gap-3 rounded-2xl border-2 border-[#0B3B24]/15 bg-white px-5 sm:px-6 py-3.5 sm:py-4 text-sm font-bold text-[#0B3B24] shadow-sm transition-all duration-300 hover:border-[#8CC63F] hover:bg-[#E8F3EC]/40 hover:-translate-y-0.5 active:scale-98 focus:outline-none focus:ring-2 focus:ring-[#8CC63F]"
               >
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E8F3EC] text-[#0B3B24] transition-colors group-hover:bg-[#8CC63F] group-hover:text-[#082A19]">
                   <Play className="h-3 w-3 fill-current ml-0.5" />
@@ -167,30 +167,31 @@ export default function Hero() {
               </a>
             </motion.div>
 
-            {/* 6. The 3 Metric Counters (Zero hardcoded, mapped from BrandProfile) */}
+            {/* 6. The 3 Metric Counters (Responsive Grid & Glassmorphic) */}
             <motion.div
               variants={itemVariants}
-              className="mt-10 sm:mt-12 grid grid-cols-3 gap-2.5 sm:gap-6 rounded-3xl border border-[#E8F3EC] bg-white/80 p-4 sm:p-6 shadow-lg shadow-[#0B3B24]/5 backdrop-blur-md"
+              className="mt-8 sm:mt-12 grid grid-cols-3 gap-2 sm:gap-6 rounded-3xl border border-[#E8F3EC] bg-white/80 p-3.5 sm:p-6 shadow-lg shadow-[#0B3B24]/5 backdrop-blur-md"
             >
               {brand.hero.metrics.map((metric, index) => (
                 <div
                   key={metric.id}
-                  className={`flex flex-col ${index < brand.hero.metrics.length - 1
-                      ? "border-r border-[#E8F3EC] pr-2.5 sm:pr-6"
+                  className={`flex flex-col ${
+                    index < brand.hero.metrics.length - 1
+                      ? "border-r border-[#E8F3EC] pr-2 sm:pr-6"
                       : ""
-                    }`}
+                  }`}
                 >
-                  <div className="flex items-center gap-1.5 sm:gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     {getMetricIcon(metric.icon)}
-                    <span className="text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#0B3B24]">
+                    <span className="text-base sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#0B3B24]">
                       {metric.value}
                     </span>
                   </div>
-                  <span className="mt-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#0B3B24]/80">
+                  <span className="mt-1 text-[9px] sm:text-xs font-bold uppercase tracking-wider text-[#0B3B24]/80">
                     {metric.label}
                   </span>
                   {metric.sublabel && (
-                    <span className="mt-0.5 text-[11px] text-[#1B263B]/60 hidden sm:block">
+                    <span className="mt-0.5 text-[10px] sm:text-[11px] text-[#1B263B]/60 hidden sm:block">
                       {metric.sublabel}
                     </span>
                   )}

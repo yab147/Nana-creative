@@ -13,7 +13,7 @@ export default function PartnersOverview() {
   const marqueeItems = [...partners, ...partners, ...partners];
 
   return (
-    <section className="relative overflow-hidden border-b border-[#E8F3EC] bg-[#F7F9F8] py-16 sm:py-20 lg:py-24">
+    <section className="relative overflow-hidden border-b border-[#E8F3EC] bg-[#F7F9F8] py-12 sm:py-16 lg:py-20">
       {/* Header Container */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
@@ -21,7 +21,7 @@ export default function PartnersOverview() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center max-w-3xl mx-auto mb-12 sm:mb-16"
+          className="text-center max-w-3xl mx-auto mb-10 sm:mb-14"
         >
           {/* Mint Status Pill */}
           <div className="mb-3.5 inline-flex items-center gap-2 rounded-full border border-[#E8F3EC] bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-[#0B3B24] shadow-xs">

@@ -42,13 +42,13 @@ export default function ServicesBento() {
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 28 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5,
-        ease: "easeOut",
+        duration: 0.7,
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
@@ -56,7 +56,7 @@ export default function ServicesBento() {
   return (
     <section
       id="services"
-      className="relative bg-[#F7F9F8] py-20 lg:py-28 text-[#1B263B]"
+      className="relative bg-[#F7F9F8] py-14 sm:py-20 lg:py-28 text-[#1B263B]"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Section Header */}
@@ -85,9 +85,9 @@ export default function ServicesBento() {
             <motion.div
               key={service.id}
               variants={itemVariants}
-              whileHover={{ y: -4 }}
+              whileHover={{ y: -4, scale: 1.01 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#E8F3EC] bg-white p-8 sm:p-10 shadow-sm hover:border-[#8CC63F] hover:shadow-xl hover:shadow-[#0B3B24]/5 transition-all duration-300"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#E8F3EC] bg-white p-6 sm:p-8 lg:p-10 shadow-sm hover:border-[#8CC63F] hover:shadow-xl hover:shadow-[#0B3B24]/5 transition-all duration-300"
             >
               {/* Card Header: Number & Icon */}
               <div>

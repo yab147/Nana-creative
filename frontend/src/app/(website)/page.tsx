@@ -68,7 +68,7 @@ export default function Home() {
       <PartnersOverview />
 
       {/* 3. Editorial Gateway: Modular Multi-Page Navigation Hub */}
-      <section className="border-t border-[#E8F3EC] bg-[#F7F9F8] py-16 lg:py-24">
+      <section className="border-t border-[#E8F3EC] bg-[#F7F9F8] py-12 sm:py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div className="max-w-2xl">
@@ -90,14 +90,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 sm:gap-6">
             {pageModules.map((module) => {
               const Icon = module.icon;
               return (
                 <Link
                   key={module.href}
                   href={module.href}
-                  className="group flex flex-col justify-between rounded-3xl border border-[#E8F3EC] bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#8CC63F] hover:shadow-xl hover:shadow-[#0B3B24]/5"
+                  className="group flex flex-col justify-between rounded-3xl border border-[#E8F3EC] bg-white p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#8CC63F] hover:shadow-xl hover:shadow-[#0B3B24]/5"
                 >
                   <div>
                     <div className="flex items-center justify-between">

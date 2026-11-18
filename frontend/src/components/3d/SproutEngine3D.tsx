@@ -9,7 +9,7 @@ interface SproutEngine3DProps {
 }
 
 export default function SproutEngine3D({
-  containerClassName = "h-[400px] sm:h-[500px] lg:h-[620px] w-full",
+  containerClassName = "h-[380px] sm:h-[460px] md:h-[520px] lg:h-[620px] w-full",
 }: SproutEngine3DProps) {
   return <NanaInteractiveLogo3D className={containerClassName} />;
 }

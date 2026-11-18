@@ -12,7 +12,7 @@ export default function GearShowcase() {
   return (
     <section
       id="gear"
-      className="relative bg-white py-20 lg:py-28 text-[#1B263B]"
+      className="relative bg-white py-14 sm:py-20 lg:py-28 text-[#1B263B]"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Section Header */}
@@ -41,15 +41,16 @@ export default function GearShowcase() {
           {gearData.items.map((item, index) => (
             <motion.div
               key={item.name}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{
-                duration: 0.5,
-                delay: index * 0.15,
-                ease: "easeOut",
+                duration: 0.7,
+                delay: index * 0.1,
+                ease: [0.16, 1, 0.3, 1],
               }}
-              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#E8F3EC] bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+              whileHover={{ y: -6, scale: 1.01 }}
+              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#E8F3EC] bg-white transition-all duration-300 hover:shadow-xl hover:shadow-[#0B3B24]/5"
             >
               {/* Card Image: Top half light grey image container rendering Next.js <Image /> */}
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F7F9F8]">

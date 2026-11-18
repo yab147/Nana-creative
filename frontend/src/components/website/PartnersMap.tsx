@@ -89,7 +89,7 @@ export default function PartnersMap() {
   return (
     <section
       id="ethiopia-network-orbit"
-      className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-24 pb-24 lg:pb-32"
+      className="relative overflow-hidden bg-white py-12 sm:py-18 lg:py-22 pb-16 lg:pb-24"
     >
       {/* Background Soft Glow */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[650px] w-[650px] rounded-full bg-[#E8F3EC]/50 blur-[120px]" />
@@ -146,7 +146,7 @@ export default function PartnersMap() {
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerUp}
-              className={`relative aspect-square w-full max-w-[360px] sm:max-w-[500px] lg:max-w-[580px] touch-none select-none rounded-full mx-auto ${
+              className={`relative aspect-square w-full max-w-[310px] sm:max-w-[460px] lg:max-w-[580px] touch-none select-none rounded-full mx-auto ${
                 isDragging ? "cursor-grabbing" : "cursor-grab"
               }`}
               role="region"
@@ -269,7 +269,7 @@ export default function PartnersMap() {
                     onClick={() => setSelectedPartner(partner)}
                     aria-label={`Inspect ${partner.name}`}
                     aria-pressed={isSelected}
-                    className={`absolute z-30 flex h-13 w-13 sm:h-16 sm:w-16 lg:h-20 lg:w-20 items-center justify-center rounded-full border-2 bg-white p-2 sm:p-2.5 shadow-lg transition-all duration-300 hover:scale-110 hover:border-[#8CC63F] ${
+                    className={`absolute z-30 flex h-11 w-11 sm:h-16 sm:w-16 lg:h-20 lg:w-20 items-center justify-center rounded-full border-2 bg-white p-1.5 sm:p-2.5 shadow-lg transition-all duration-300 hover:scale-110 hover:border-[#8CC63F] ${
                       isSelected
                         ? "border-[#8CC63F] ring-4 ring-[#8CC63F]/25 shadow-xl shadow-[#0B3B24]/15 scale-110 z-40 bg-white"
                         : "border-[#E8F3EC] opacity-90 hover:opacity-100"

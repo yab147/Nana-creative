@@ -34,14 +34,14 @@ export default function AnalyticsPage() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.45,
-        ease: "easeOut",
+        duration: 0.65,
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9F8] py-14 lg:py-20 text-[#1B263B]">
+    <div className="min-h-screen bg-[#F7F9F8] py-10 sm:py-16 lg:py-20 text-[#1B263B]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Header */}
         <div className="mb-14 max-w-2xl">
@@ -52,16 +52,16 @@ export default function AnalyticsPage() {
             </span>
             {analytics.badge}
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl text-[#0B3B24]">
+          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl text-[#0B3B24]">
             {analytics.headline}
           </h1>
-          <p className="mt-3 text-lg text-[#1B263B]/75 leading-relaxed font-light">
+          <p className="mt-3 text-base sm:text-lg text-[#1B263B]/75 leading-relaxed font-light">
             {analytics.subheadline}
           </p>
         </div>
 
-        {/* 1. TikTok Live Channel Showcase (49 Following, 2,252 Followers, 52K Likes) */}
-        <div className="mb-14 overflow-hidden rounded-3xl bg-[#0B3B24] p-8 sm:p-12 text-white shadow-2xl shadow-[#0B3B24]/15 border border-[#8CC63F]/25">
+        {/* 1. TikTok Live Channel Showcase */}
+        <div className="mb-14 overflow-hidden rounded-3xl bg-[#0B3B24] p-6 sm:p-10 lg:p-12 text-white shadow-2xl shadow-[#0B3B24]/15 border border-[#8CC63F]/25">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-[#8CC63F]/30 bg-[#082A19] px-3.5 py-1 text-xs font-mono text-[#8CC63F]">

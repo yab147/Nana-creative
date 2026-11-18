@@ -39,8 +39,8 @@ export default function ClientGrid({ showTitle = true }: ClientGridProps) {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.45,
-        ease: "easeOut",
+        duration: 0.65,
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
@@ -48,7 +48,7 @@ export default function ClientGrid({ showTitle = true }: ClientGridProps) {
   return (
     <section
       id="portfolio"
-      className="relative bg-[#F7F9F8] py-16 lg:py-24 text-[#1B263B]"
+      className="relative bg-[#F7F9F8] py-14 sm:py-20 lg:py-24 text-[#1B263B]"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Section Header */}
@@ -138,7 +138,7 @@ export default function ClientGrid({ showTitle = true }: ClientGridProps) {
           {/* ========================================================= */}
           {/* 2. HEALTHCARE & MEDICAL AUTHORITY (Distinct #0B3B24 Dark) */}
           {/* ========================================================= */}
-          <div className="relative overflow-hidden rounded-3xl bg-[#0B3B24] p-8 sm:p-12 text-white shadow-2xl shadow-[#0B3B24]/20 border border-[#8CC63F]/25">
+          <div className="relative overflow-hidden rounded-3xl bg-[#0B3B24] p-6 sm:p-10 lg:p-12 text-white shadow-2xl shadow-[#0B3B24]/20 border border-[#8CC63F]/25">
             {/* Atmospheric Glow Halos */}
             <div className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-[#8CC63F]/15 blur-[100px]" />
             <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-[#082A19] blur-[80px]" />

@@ -41,8 +41,8 @@ export default function AboutSection() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5,
-        ease: "easeOut",
+        duration: 0.7,
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
@@ -50,7 +50,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-[#0B3B24] py-16 lg:py-24 text-white selection:bg-[#8CC63F] selection:text-[#082A19]"
+      className="relative overflow-hidden bg-[#0B3B24] py-12 sm:py-18 lg:py-24 text-white selection:bg-[#8CC63F] selection:text-[#082A19]"
     >
       {/* Editorial Atmospheric Halos */}
       <div className="pointer-events-none absolute -top-40 -right-40 h-[520px] w-[520px] rounded-full bg-[#8CC63F]/10 blur-[130px]" />
@@ -116,7 +116,7 @@ export default function AboutSection() {
             {/* Headline: hi, we're nana. */}
             <motion.h1
               variants={itemVariants}
-              className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white lowercase leading-tight"
+              className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white lowercase leading-tight"
             >
               {about.headline}
             </motion.h1>

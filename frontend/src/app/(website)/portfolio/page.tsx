@@ -13,26 +13,26 @@ export default function PortfolioPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
+        staggerChildren: 0.07,
+        delayChildren: 0.08,
       },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 18 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.45,
-        ease: "easeOut",
+        duration: 0.65,
+        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9F8] py-14 lg:py-20 text-[#1B263B]">
+    <div className="min-h-screen bg-[#F7F9F8] py-10 sm:py-16 lg:py-20 text-[#1B263B]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Header: Active Partnership Success Stories with subtext and VIEW FULL PORTFOLIO INDEX link */}
         <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-b border-[#E8F3EC] pb-8">

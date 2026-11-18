@@ -25,14 +25,16 @@ export default function BlogCard({ post, index }: BlogCardProps) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{
-        duration: 0.5,
-        delay: index * 0.1,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        duration: 0.7,
+        delay: index * 0.08,
+        ease: [0.16, 1, 0.3, 1],
       }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#E8F3EC] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#8CC63F]/40 hover:shadow-xl hover:shadow-[#0B3B24]/5"
+      whileHover={{ y: -4, scale: 1.01 }}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#E8F3EC] bg-white shadow-sm transition-all duration-300 hover:border-[#8CC63F]/40 hover:shadow-xl hover:shadow-[#0B3B24]/5"
     >
       {/* Top Image Container */}
       <Link href={`/blog/${post.id}`} className="relative block aspect-[16/10] w-full overflow-hidden bg-[#F7F9F8]">

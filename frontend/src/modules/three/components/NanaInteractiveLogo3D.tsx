@@ -150,7 +150,7 @@ const LETTERS_CONFIG: LetterConfig[] = [
   },
 ];
 
-// Helper to create the two crisp organic sprout leaves
+// Helper to create the two organic sprout leaves
 function createSproutLeafShape(isLeft: boolean): THREE.Shape {
   const shape = new THREE.Shape();
   shape.moveTo(0, 0);
@@ -165,365 +165,129 @@ function createSproutLeafShape(isLeft: boolean): THREE.Shape {
 }
 
 // =========================================================================
-// 2. SCENE 1: THE STUDIO DIORAMA
+// 2. CREATIVE 3D ROBOTIC CAMERA RIG / ARM (PRODUCTION IDENTITY)
 // =========================================================================
-function StudioDiorama({
-  opacity = 1.0,
-  dioramaMouseRef,
-  robotRightArmRef,
+function RoboticCameraRig({
+  armRef,
+  probeRef,
+  tallyColor = "#8CC63F",
 }: {
-  opacity?: number;
-  dioramaMouseRef?: React.RefObject<THREE.Mesh | null>;
-  robotRightArmRef?: React.RefObject<THREE.Group | null>;
+  armRef: React.RefObject<THREE.Group | null>;
+  probeRef: React.RefObject<THREE.Mesh | null>;
+  tallyColor?: string;
 }) {
   return (
-    <group position={[0, -0.5, 0]}>
-      {/* Diorama Base / Studio Floor (Dark Slate/Charcoal) */}
-      <mesh position={[0, -0.08, -0.2]} receiveShadow>
-        <boxGeometry args={[4.4, 0.16, 4.0]} />
-        <meshStandardMaterial
-          color="#0E1724"
-          roughness={0.75}
-          metalness={0.2}
-          transparent
-          opacity={opacity}
-        />
+    <group ref={armRef} position={[1.75, -1.05, 0.0]}>
+      {/* Heavy Cylindrical Turntable Base */}
+      <mesh position={[0, 0.05, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.26, 0.32, 0.1, 24]} />
+        <meshStandardMaterial color="#0A111A" roughness={0.35} metalness={0.7} />
       </mesh>
 
-      {/* Back Studio Wall with Acoustic Slats */}
-      <mesh position={[0, 1.5, -2.15]} receiveShadow>
-        <boxGeometry args={[4.4, 3.0, 0.1]} />
-        <meshStandardMaterial
-          color="#121D2C"
-          roughness={0.8}
-          metalness={0.15}
-          transparent
-          opacity={opacity}
-        />
+      {/* Emerald / Lime Accent Ring on Turntable */}
+      <mesh position={[0, 0.105, 0]}>
+        <ringGeometry args={[0.22, 0.25, 24]} />
+        <meshBasicMaterial color="#8CC63F" />
       </mesh>
 
-      {/* Subtle Wall Accent Shelf */}
-      <mesh position={[0, 2.3, -2.05]}>
-        <boxGeometry args={[3.2, 0.06, 0.24]} />
-        <meshStandardMaterial
-          color="#1B283C"
-          roughness={0.6}
-          metalness={0.3}
-          transparent
-          opacity={opacity}
-        />
-      </mesh>
-
-      {/* ======================================================== */}
-      {/* THE MODERN DESK                                          */}
-      {/* ======================================================== */}
-      <group position={[0, 0.75, -0.5]}>
-        {/* Desk Top */}
-        <mesh castShadow receiveShadow>
-          <boxGeometry args={[2.7, 0.08, 1.35]} />
-          <meshStandardMaterial
-            color="#182333"
-            roughness={0.5}
-            metalness={0.2}
-            transparent
-            opacity={opacity}
-          />
+      {/* Shoulder Joint Pivot */}
+      <group position={[0, 0.18, 0]}>
+        <mesh castShadow>
+          <sphereGeometry args={[0.13, 16, 16]} />
+          <meshStandardMaterial color="#141E2B" roughness={0.3} metalness={0.8} />
         </mesh>
 
-        {/* Minimalist Desk Steel Legs */}
-        <mesh position={[-1.2, -0.38, 0]}>
-          <boxGeometry args={[0.08, 0.72, 1.1]} />
-          <meshStandardMaterial
-            color="#0A111A"
-            roughness={0.7}
-            metalness={0.4}
-            transparent
-            opacity={opacity}
-          />
+        {/* Lower Boom (Twin Carbon-Fiber Tubes with Metallic Joints) */}
+        <mesh position={[-0.18, 0.36, 0.08]} rotation={[0.42, 0.15, -0.45]} castShadow>
+          <cylinderGeometry args={[0.032, 0.038, 0.78, 12]} />
+          <meshStandardMaterial color="#1E293B" roughness={0.5} metalness={0.6} />
         </mesh>
-        <mesh position={[1.2, -0.38, 0]}>
-          <boxGeometry args={[0.08, 0.72, 1.1]} />
-          <meshStandardMaterial
-            color="#0A111A"
-            roughness={0.7}
-            metalness={0.4}
-            transparent
-            opacity={opacity}
-          />
+        <mesh position={[-0.26, 0.36, -0.04]} rotation={[0.42, 0.15, -0.45]} castShadow>
+          <cylinderGeometry args={[0.032, 0.038, 0.78, 12]} />
+          <meshStandardMaterial color="#1E293B" roughness={0.5} metalness={0.6} />
         </mesh>
 
-        {/* Oversized Dark Emerald Desk Mat */}
-        <mesh position={[0, 0.045, 0.05]} receiveShadow>
-          <boxGeometry args={[1.9, 0.01, 0.82]} />
-          <meshStandardMaterial
-            color="#082015"
-            roughness={0.6}
-            metalness={0.1}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-
-        {/* Backlit Mechanical Keyboard */}
-        <mesh position={[-0.15, 0.06, 0.15]} castShadow>
-          <boxGeometry args={[0.72, 0.025, 0.24]} />
-          <meshStandardMaterial
-            color="#0B131D"
-            emissive="#8CC63F"
-            emissiveIntensity={0.25}
-            roughness={0.4}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-
-        {/* Ergonomic Desk Mouse */}
-        <mesh
-          ref={dioramaMouseRef}
-          position={[0.55, 0.065, 0.16]}
-          castShadow
-        >
-          <boxGeometry args={[0.13, 0.04, 0.22]} />
-          <meshStandardMaterial
-            color="#8CC63F"
-            emissive="#8CC63F"
-            emissiveIntensity={0.5}
-            roughness={0.3}
-            metalness={0.2}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-
-        {/* Ceramic Coffee Mug */}
-        <mesh position={[-0.75, 0.09, 0.18]} castShadow>
-          <cylinderGeometry args={[0.065, 0.06, 0.14, 16]} />
-          <meshStandardMaterial
-            color="#E8F3EC"
-            roughness={0.2}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-
-        {/* ======================================================== */}
-        {/* THE GLOWING COMPUTER MONITOR (PORTAL TO SCENE 2)         */}
-        {/* ======================================================== */}
-        <group position={[0, 0.65, -0.22]}>
-          {/* Heavy Articulated Aluminum Stand */}
-          <mesh position={[0, -0.32, -0.1]} castShadow>
-            <cylinderGeometry args={[0.04, 0.05, 0.55, 16]} />
-            <meshStandardMaterial
-              color="#0A111A"
-              roughness={0.4}
-              metalness={0.6}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-          <mesh position={[0, -0.6, -0.1]}>
-            <boxGeometry args={[0.42, 0.02, 0.32]} />
-            <meshStandardMaterial
-              color="#0A111A"
-              roughness={0.4}
-              metalness={0.6}
-              transparent
-              opacity={opacity}
-            />
+        {/* Articulated Elbow Joint Housing */}
+        <group position={[-0.38, 0.68, 0.12]}>
+          <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
+            <cylinderGeometry args={[0.09, 0.09, 0.18, 16]} />
+            <meshStandardMaterial color="#0B3B24" roughness={0.4} metalness={0.5} />
           </mesh>
 
-          {/* Monitor Chassis & Slim Bezel */}
-          <mesh position={[0, 0.15, 0]} castShadow>
-            <boxGeometry args={[2.2, 1.25, 0.06]} />
-            <meshStandardMaterial
-              color="#080E16"
-              roughness={0.4}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
+          {/* Forearm Boom */}
+          <group position={[-0.14, -0.22, 0.08]} rotation={[-0.3, 0.1, 0.5]}>
+            <mesh castShadow>
+              <boxGeometry args={[0.07, 0.44, 0.09]} />
+              <meshStandardMaterial color="#141E2B" roughness={0.3} metalness={0.7} />
+            </mesh>
 
-          {/* THE GLOWING SCREEN PLANE */}
-          <mesh position={[0, 0.15, 0.035]}>
-            <planeGeometry args={[2.12, 1.17]} />
-            <meshStandardMaterial
-              color="#0B3B24"
-              emissive="#8CC63F"
-              emissiveIntensity={1.9}
-              roughness={0.15}
-              metalness={0.1}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
+            {/* Wrist 3-Axis Gimbal */}
+            <group position={[0, -0.26, 0.02]}>
+              <mesh castShadow>
+                <sphereGeometry args={[0.07, 14, 14]} />
+                <meshStandardMaterial color="#0A111A" roughness={0.3} metalness={0.8} />
+              </mesh>
 
-          {/* Monitor Glow Light (Illuminating the Man and Desk) */}
-          <pointLight
-            position={[0, 0.15, 0.35]}
-            intensity={4.8 * opacity}
-            color="#8CC63F"
-            distance={3.2}
-            decay={2}
-          />
-          <spotLight
-            position={[0, 0.3, 0.2]}
-            target-position={[0, -0.4, 0.8]}
-            angle={0.85}
-            penumbra={0.7}
-            intensity={4.2 * opacity}
-            color="#E8F3EC"
-          />
-        </group>
-      </group>
+              {/* Stylized Cinema Camera Body (ARRI/RED/Canon Cine Hybrid) */}
+              <group position={[-0.08, -0.04, 0.05]} rotation={[0.2, -0.3, 0.1]}>
+                {/* Cinema Box Camera Chassis */}
+                <mesh castShadow>
+                  <boxGeometry args={[0.22, 0.15, 0.16]} />
+                  <meshStandardMaterial color="#0B131D" roughness={0.4} metalness={0.5} />
+                </mesh>
 
-      {/* ======================================================== */}
-      {/* THE MAN SITTING IN ERGONOMIC CHAIR                      */}
-      {/* ======================================================== */}
-      <group position={[0, 0, 0.45]}>
-        {/* Star Base & Casters on floor */}
-        <mesh position={[0, 0.04, 0]}>
-          <cylinderGeometry args={[0.38, 0.38, 0.04, 5]} />
-          <meshStandardMaterial
-            color="#080E16"
-            roughness={0.6}
-            metalness={0.4}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-        <mesh position={[0, 0.25, 0]}>
-          <cylinderGeometry args={[0.045, 0.045, 0.38, 16]} />
-          <meshStandardMaterial
-            color="#141E2B"
-            roughness={0.3}
-            metalness={0.7}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
+                {/* Top Handle / Monitor Bracket */}
+                <mesh position={[0, 0.1, 0]}>
+                  <boxGeometry args={[0.16, 0.03, 0.04]} />
+                  <meshStandardMaterial color="#1F2937" roughness={0.4} metalness={0.6} />
+                </mesh>
 
-        {/* Chair Seat Cushion */}
-        <mesh position={[0, 0.48, 0.05]} castShadow>
-          <boxGeometry args={[0.62, 0.1, 0.58]} />
-          <meshStandardMaterial
-            color="#121A26"
-            roughness={0.7}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
+                {/* Cinema Lens Barrel with Focus Scale Ring */}
+                <group position={[-0.14, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+                  <mesh castShadow>
+                    <cylinderGeometry args={[0.065, 0.075, 0.14, 18]} />
+                    <meshStandardMaterial color="#0A0E17" roughness={0.2} metalness={0.7} />
+                  </mesh>
+                  {/* Sprout Lime Focus Ring */}
+                  <mesh position={[0, 0.01, 0]}>
+                    <cylinderGeometry args={[0.076, 0.076, 0.02, 18]} />
+                    <meshStandardMaterial
+                      color="#8CC63F"
+                      roughness={0.3}
+                      emissive="#8CC63F"
+                      emissiveIntensity={0.4}
+                    />
+                  </mesh>
+                  {/* Front Lens Glass Element */}
+                  <mesh position={[0, 0.075, 0]}>
+                    <circleGeometry args={[0.06, 18]} />
+                    <meshStandardMaterial color="#1B263B" roughness={0.1} metalness={0.9} />
+                  </mesh>
+                </group>
 
-        {/* Contoured Ergonomic Backrest */}
-        <mesh position={[0, 0.95, -0.22]} rotation={[0.1, 0, 0]} castShadow>
-          <boxGeometry args={[0.56, 0.85, 0.08]} />
-          <meshStandardMaterial
-            color="#0C131D"
-            roughness={0.8}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
+                {/* Active Production Tally Light */}
+                <mesh position={[0.08, 0.06, 0.082]}>
+                  <sphereGeometry args={[0.018, 10, 10]} />
+                  <meshStandardMaterial
+                    color={tallyColor}
+                    emissive={tallyColor}
+                    emissiveIntensity={2.5}
+                  />
+                </mesh>
 
-        {/* Adjustable Headrest */}
-        <mesh position={[0, 1.45, -0.26]} rotation={[0.1, 0, 0]}>
-          <boxGeometry args={[0.34, 0.16, 0.06]} />
-          <meshStandardMaterial
-            color="#0C131D"
-            roughness={0.8}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-
-        {/* Armrests */}
-        <mesh position={[-0.34, 0.68, 0.05]}>
-          <boxGeometry args={[0.07, 0.04, 0.32]} />
-          <meshStandardMaterial
-            color="#080E16"
-            roughness={0.5}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-        <mesh position={[0.34, 0.68, 0.05]}>
-          <boxGeometry args={[0.07, 0.04, 0.32]} />
-          <meshStandardMaterial
-            color="#080E16"
-            roughness={0.5}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-
-        {/* ======================================================== */}
-        {/* CHARACTER: Stylized Man Working in the Studio            */}
-        {/* ======================================================== */}
-        {/* Torso in Dark Modern Hoodie */}
-        <mesh position={[0, 0.85, 0.02]} rotation={[0.08, 0, 0]} castShadow>
-          <capsuleGeometry args={[0.22, 0.44, 8, 16]} />
-          <meshStandardMaterial
-            color="#1F2937"
-            roughness={0.75}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-
-        {/* Stylized Head with Modern Hair */}
-        <group position={[0, 1.34, 0.04]} rotation={[0.12, 0, 0]}>
-          <mesh castShadow>
-            <sphereGeometry args={[0.16, 20, 20]} />
-            <meshStandardMaterial
-              color="#E2B18E"
-              roughness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-          {/* Hair Mesh */}
-          <mesh position={[0, 0.06, -0.03]} rotation={[-0.1, 0, 0]}>
-            <sphereGeometry args={[0.17, 18, 18, 0, Math.PI * 2, 0, Math.PI * 0.6]} />
-            <meshStandardMaterial
-              color="#131B26"
-              roughness={0.9}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-        </group>
-
-        {/* Left Arm reaching to keyboard */}
-        <mesh position={[-0.24, 0.72, 0.22]} rotation={[0.65, 0.1, -0.2]}>
-          <cylinderGeometry args={[0.06, 0.05, 0.42, 12]} />
-          <meshStandardMaterial
-            color="#1F2937"
-            roughness={0.75}
-            transparent
-            opacity={opacity}
-          />
-        </mesh>
-
-        {/* Right Arm & Hand reaching to mouse */}
-        <group ref={robotRightArmRef} position={[0.28, 0.72, 0.22]} rotation={[0.68, -0.15, 0.2]}>
-          <mesh>
-            <cylinderGeometry args={[0.06, 0.05, 0.42, 12]} />
-            <meshStandardMaterial
-              color="#1F2937"
-              roughness={0.75}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-          <mesh position={[0, -0.22, 0.02]} rotation={[-0.2, 0, 0]}>
-            <boxGeometry args={[0.07, 0.04, 0.1]} />
-            <meshStandardMaterial
-              color="#E2B18E"
-              roughness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
+                {/* Tactile Robotic Finger / Actuator Probe for Mouse Click */}
+                <mesh
+                  ref={probeRef}
+                  position={[-0.1, -0.12, 0.08]}
+                  rotation={[0.3, 0, 0]}
+                  castShadow
+                >
+                  <cylinderGeometry args={[0.015, 0.02, 0.16, 12]} />
+                  <meshStandardMaterial color="#8CC63F" roughness={0.3} metalness={0.4} />
+                </mesh>
+              </group>
+            </group>
+          </group>
         </group>
       </group>
     </group>
@@ -531,33 +295,26 @@ function StudioDiorama({
 }
 
 // =========================================================================
-// 3. SCENE 2: THE LOGO REVEAL (INSIDE THE DIGITAL VOID)
+// 3. CONTINUOUS 3D RECYCLING HERO SCENE
 // =========================================================================
-function LogoRevealScene({
-  isAligned,
-  onMouseClick,
-  lettersGroupRefs,
-  sparklesGroupRef,
-  leavesGroupRef,
-  stemMaterial,
-  leftClickRef,
-  scrollWheelRef,
-  mouseGroupRef,
-  isHovered,
-  setIsHovered,
-}: {
-  isAligned: boolean;
-  onMouseClick?: () => void;
-  lettersGroupRefs: React.MutableRefObject<(THREE.Group | null)[]>;
-  sparklesGroupRef: React.RefObject<THREE.Group | null>;
-  leavesGroupRef: React.RefObject<THREE.Group | null>;
-  stemMaterial: THREE.MeshStandardMaterial;
-  leftClickRef: React.RefObject<THREE.Mesh | null>;
-  scrollWheelRef: React.RefObject<THREE.Mesh | null>;
-  mouseGroupRef: React.RefObject<THREE.Group | null>;
-  isHovered: boolean;
-  setIsHovered: (hovered: boolean) => void;
-}) {
+function ContinuousHeroScene() {
+  const { camera, size } = useThree();
+
+  // References
+  const mouseGroupRef = useRef<THREE.Group>(null);
+  const leftClickRef = useRef<THREE.Mesh>(null);
+  const scrollWheelRef = useRef<THREE.Mesh>(null);
+  const leavesGroupRef = useRef<THREE.Group>(null);
+  const sparklesGroupRef = useRef<THREE.Group>(null);
+  const robotArmRef = useRef<THREE.Group>(null);
+  const probeRef = useRef<THREE.Mesh>(null);
+  const flashLightRef = useRef<THREE.PointLight>(null);
+  const lettersGroupRefs = useRef<(THREE.Group | null)[]>([]);
+
+  // States
+  const [isHovered, setIsHovered] = useState(false);
+  const [isLockedUp, setIsLockedUp] = useState(false);
+
   // 1. Curved L-Shape TubeGeometry
   const { stemTubeGeo } = useMemo(() => {
     const curve = new THREE.CatmullRomCurve3([
@@ -575,6 +332,18 @@ function LogoRevealScene({
   }, []);
 
   // 2. Materials
+  const stemMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: new THREE.Color("#8CC63F"),
+        emissive: new THREE.Color("#8CC63F"),
+        emissiveIntensity: 1.1,
+        roughness: 0.18,
+        metalness: 0.1,
+      }),
+    []
+  );
+
   const mouseLimeMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
@@ -612,7 +381,7 @@ function LogoRevealScene({
     () =>
       new THREE.MeshStandardMaterial({
         color: new THREE.Color("#FFFFFF"),
-        roughness: 0.28,
+        roughness: 0.25,
         metalness: 0.05,
       }),
     []
@@ -634,23 +403,365 @@ function LogoRevealScene({
     };
   }, []);
 
-  // Ambient breathing sway for leaves
+  // 4. GSAP Automated Continuous Recycling Loop (repeat: -1)
+  useEffect(() => {
+    // Initial Setup: Set letters to scattered positions
+    LETTERS_CONFIG.forEach((cfg, index) => {
+      const group = lettersGroupRefs.current[index];
+      if (group) {
+        group.position.set(...cfg.scatPos);
+        group.rotation.set(...cfg.scatRot);
+      }
+    });
+
+    // Master Timeline with infinite automated continuous loop
+    const masterTl = gsap.timeline({
+      repeat: -1,
+      repeatDelay: 0.6,
+      delay: 0.4,
+    });
+
+    // =============================================================
+    // STEP 1: THE ACTION (Robotic arm smoothly moves down & clicks mouse)
+    // =============================================================
+    if (robotArmRef.current) {
+      // Articulate arm downward to press left mouse button
+      masterTl.to(
+        robotArmRef.current.position,
+        {
+          x: 1.62,
+          y: -1.14,
+          z: 0.06,
+          duration: 0.7,
+          ease: "power2.inOut",
+        },
+        0.2
+      );
+
+      masterTl.to(
+        robotArmRef.current.rotation,
+        {
+          x: 0.16,
+          z: -0.14,
+          duration: 0.7,
+          ease: "power2.inOut",
+        },
+        0.2
+      );
+    }
+
+    // Mouse Left Button clicks down
+    if (leftClickRef.current) {
+      masterTl.to(
+        leftClickRef.current.position,
+        {
+          y: 0.065,
+          duration: 0.12,
+          ease: "power1.in",
+        },
+        0.85
+      );
+      masterTl.to(
+        leftClickRef.current.position,
+        {
+          y: 0.1,
+          duration: 0.16,
+          ease: "power1.out",
+        },
+        0.97
+      );
+    }
+
+    // =============================================================
+    // STEP 2: THE ASSEMBLY (Letters snap into lockup + Camera Flash)
+    // =============================================================
+    // Cinematic camera flash pulse
+    if (flashLightRef.current) {
+      masterTl.to(
+        flashLightRef.current,
+        {
+          intensity: 8.5,
+          duration: 0.09,
+          ease: "power2.out",
+        },
+        0.95
+      );
+      masterTl.to(
+        flashLightRef.current,
+        {
+          intensity: 0.3,
+          duration: 0.45,
+          ease: "power2.in",
+        },
+        1.04
+      );
+    }
+
+    // Stem neon luminous surge
+    masterTl.to(
+      stemMaterial,
+      {
+        emissiveIntensity: 3.5,
+        duration: 0.35,
+        yoyo: true,
+        repeat: 1,
+        ease: "power2.out",
+      },
+      0.95
+    );
+
+    // Leaves perk up energetically
+    if (leavesGroupRef.current) {
+      masterTl.to(
+        leavesGroupRef.current.scale,
+        {
+          x: 1.25,
+          y: 1.25,
+          z: 1.25,
+          duration: 0.35,
+          yoyo: true,
+          repeat: 1,
+          ease: "back.out(2)",
+        },
+        0.95
+      );
+    }
+
+    // Sparkles expand
+    if (sparklesGroupRef.current) {
+      masterTl.to(
+        sparklesGroupRef.current.scale,
+        {
+          x: 1.6,
+          y: 1.6,
+          z: 1.6,
+          duration: 0.45,
+          yoyo: true,
+          repeat: 1,
+          ease: "power2.out",
+        },
+        0.98
+      );
+    }
+
+    // Robot arm retracts slightly to a hovering observation pose
+    if (robotArmRef.current) {
+      masterTl.to(
+        robotArmRef.current.position,
+        {
+          x: 1.75,
+          y: -1.05,
+          z: 0.0,
+          duration: 0.7,
+          ease: "power2.out",
+        },
+        1.05
+      );
+      masterTl.to(
+        robotArmRef.current.rotation,
+        {
+          x: 0,
+          z: 0,
+          duration: 0.7,
+          ease: "power2.out",
+        },
+        1.05
+      );
+    }
+
+    // Letters assemble in L-pocket
+    masterTl.add(() => setIsLockedUp(true), 1.0);
+    LETTERS_CONFIG.forEach((cfg, index) => {
+      const group = lettersGroupRefs.current[index];
+      if (!group) return;
+
+      masterTl.to(
+        group.position,
+        {
+          x: cfg.targetPos[0],
+          y: cfg.targetPos[1],
+          z: cfg.targetPos[2],
+          duration: 0.95,
+          ease: "back.out(1.4)",
+        },
+        1.0 + index * 0.035
+      );
+
+      masterTl.to(
+        group.rotation,
+        {
+          x: 0,
+          y: 0,
+          z: 0,
+          duration: 0.85,
+          ease: "power2.out",
+        },
+        1.0 + index * 0.035
+      );
+    });
+
+    // =============================================================
+    // STEP 3: THE PAUSE (Hold perfect logo lockup for 4 seconds)
+    // =============================================================
+    masterTl.to({}, { duration: 4.0 });
+
+    // =============================================================
+    // STEP 4: THE REWIND (The Recycle: Digital glitch & scatter)
+    // =============================================================
+    // Quick micro-glitch jitter effect
+    LETTERS_CONFIG.forEach((cfg, index) => {
+      const group = lettersGroupRefs.current[index];
+      if (!group) return;
+      const randOffset = (index % 2 === 0 ? 1 : -1) * 0.045;
+
+      masterTl.to(
+        group.position,
+        {
+          x: `+=${randOffset}`,
+          y: `+=${-randOffset * 0.6}`,
+          duration: 0.05,
+          yoyo: true,
+          repeat: 3,
+          ease: "rough",
+        },
+        ">"
+      );
+    });
+
+    // Digital rewind glitch light flicker
+    if (flashLightRef.current) {
+      masterTl.to(
+        flashLightRef.current,
+        {
+          intensity: 3.2,
+          duration: 0.07,
+          yoyo: true,
+          repeat: 2,
+        },
+        "<"
+      );
+    }
+
+    // Letters scatter back into the air (strewed up into scatPos and scatRot)
+    masterTl.add(() => setIsLockedUp(false), ">");
+    LETTERS_CONFIG.forEach((cfg, index) => {
+      const group = lettersGroupRefs.current[index];
+      if (!group) return;
+
+      masterTl.to(
+        group.position,
+        {
+          x: cfg.scatPos[0],
+          y: cfg.scatPos[1],
+          z: cfg.scatPos[2],
+          duration: 0.95,
+          ease: "power3.inOut",
+        },
+        ">" + (index === 0 ? "" : "<+0.02")
+      );
+
+      masterTl.to(
+        group.rotation,
+        {
+          x: cfg.scatRot[0],
+          y: cfg.scatRot[1],
+          z: cfg.scatRot[2],
+          duration: 0.9,
+          ease: "power2.inOut",
+        },
+        "<"
+      );
+    });
+
+    // Reset robot arm position cleanly
+    if (robotArmRef.current) {
+      masterTl.to(
+        robotArmRef.current.position,
+        {
+          x: 1.75,
+          y: -1.05,
+          z: 0.0,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        "<"
+      );
+    }
+
+    return () => {
+      masterTl.kill();
+    };
+  }, [stemMaterial]);
+
+  // Frame Loop: Smooth Leaves sway + Dynamic Camera Responsive Controller
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
+
+    // Subtle organic breathing sway on leaves
     if (leavesGroupRef.current) {
-      leavesGroupRef.current.rotation.z = Math.sin(t * 1.6) * 0.05;
+      leavesGroupRef.current.rotation.z = Math.sin(t * 1.5) * 0.05;
       leavesGroupRef.current.rotation.x = Math.cos(t * 1.2) * 0.04;
     }
+
+    // Dynamic Camera Responsive Calculations (Mobile First)
+    const isSmallMobile = size.width < 480;
+    const isMobile = size.width < 768;
+    const isTablet = size.width < 1024;
+
+    let targetZ = 5.2;
+    let targetFov = 42;
+    let targetY = 0.25;
+
+    if (isSmallMobile) {
+      targetZ = 7.6;
+      targetFov = 54;
+      targetY = 0.15;
+    } else if (isMobile) {
+      targetZ = 6.4;
+      targetFov = 48;
+      targetY = 0.2;
+    } else if (isTablet) {
+      targetZ = 5.6;
+      targetFov = 45;
+      targetY = 0.25;
+    }
+
+    const perspCamera = camera as THREE.PerspectiveCamera;
+    if (perspCamera && Math.abs(perspCamera.fov - targetFov) > 0.1) {
+      perspCamera.fov = THREE.MathUtils.lerp(perspCamera.fov, targetFov, 0.08);
+      perspCamera.updateProjectionMatrix();
+    }
+
+    // Smooth subtle cinematic parallax
+    const parallaxX = state.pointer.x * 0.16;
+    const parallaxY = state.pointer.y * 0.1;
+
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, parallaxX, 0.05);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY + parallaxY, 0.05);
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.05);
+    camera.lookAt(0, targetY, 0);
   });
 
   return (
-    <group position={[0, -0.15, 0]}>
+    <group position={[0, -0.12, 0]}>
       {/* ======================================================== */}
-      {/* 1. THE BASE PEDESTAL (Subtle dark translucent disc)      */}
+      {/* 1. CINEMATIC CAMERA FLASH LIGHT (Pulses on mouse click)   */}
+      {/* ======================================================== */}
+      <pointLight
+        ref={flashLightRef}
+        position={[1.5, -0.4, 1.2]}
+        color="#FFFFFF"
+        intensity={0.2}
+        distance={8}
+        decay={2}
+      />
+
+      {/* ======================================================== */}
+      {/* 2. THE BASE PEDESTAL & DESK RUNNER                       */}
       {/* ======================================================== */}
       <group position={[1.15, -1.22, 0.15]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <circleGeometry args={[0.82, 48]} />
+          <circleGeometry args={[0.95, 48]} />
           <meshStandardMaterial
             color="#0D1624"
             roughness={0.7}
@@ -660,22 +771,18 @@ function LogoRevealScene({
           />
         </mesh>
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0.002]}>
-          <ringGeometry args={[0.79, 0.82, 48]} />
-          <meshBasicMaterial color="#8CC63F" transparent opacity={0.35} />
+          <ringGeometry args={[0.92, 0.95, 48]} />
+          <meshBasicMaterial color="#8CC63F" transparent opacity={0.4} />
         </mesh>
       </group>
 
       {/* ======================================================== */}
-      {/* 2. THE COMPUTER MOUSE (#8CC63F top shell, dark base)    */}
+      {/* 3. THE COMPUTER MOUSE (#8CC63F top shell, dark base)    */}
       {/* ======================================================== */}
       <group
         ref={mouseGroupRef}
         position={[1.15, -1.05, 0.2]}
         rotation={[0.22, -0.38, 0.08]}
-        onClick={(e) => {
-          e.stopPropagation();
-          onMouseClick?.();
-        }}
         onPointerOver={(e) => {
           e.stopPropagation();
           setIsHovered(true);
@@ -719,22 +826,24 @@ function LogoRevealScene({
         >
           <cylinderGeometry args={[0.075, 0.075, 0.05, 18]} />
         </mesh>
-        <mesh position={[-0.2, 0.04, 0.42]} rotation={[Math.PI / 2, -0.3, 0]} material={darkBaseMaterial}>
-          <cylinderGeometry args={[0.06, 0.075, 0.1, 14]} />
-        </mesh>
       </group>
 
       {/* ======================================================== */}
-      {/* 3. THE GLOWING STEM (L-Shape TubeGeometry)               */}
+      {/* 4. THE ROBOTIC CAMERA RIG / ARM (Hovering near desk)    */}
+      {/* ======================================================== */}
+      <RoboticCameraRig armRef={robotArmRef} probeRef={probeRef} />
+
+      {/* ======================================================== */}
+      {/* 5. THE GLOWING STEM (Curved L-Shape TubeGeometry)        */}
       {/* ======================================================== */}
       <mesh geometry={stemTubeGeo} material={stemMaterial} castShadow receiveShadow />
 
       {/* ======================================================== */}
-      {/* 4. MAGICAL PARTICLES (Bioluminescent Sparkles Dust)     */}
+      {/* 6. MAGICAL PARTICLES (Bioluminescent Sparkles Dust)     */}
       {/* ======================================================== */}
       <group ref={sparklesGroupRef}>
         <Sparkles
-          count={55}
+          count={50}
           scale={[2.6, 3.6, 1.8]}
           position={[-0.45, 0.35, 0.1]}
           color="#8CC63F"
@@ -744,7 +853,7 @@ function LogoRevealScene({
           opacity={0.85}
         />
         <Sparkles
-          count={32}
+          count={30}
           scale={[2.2, 3.2, 1.4]}
           position={[-0.45, 0.35, 0.1]}
           color="#FFFFFF"
@@ -756,7 +865,7 @@ function LogoRevealScene({
       </group>
 
       {/* ======================================================== */}
-      {/* 5. THE LEAVES (Two crisp bright green sprout leaves)     */}
+      {/* 7. THE LEAVES (Two crisp bright green sprout leaves)     */}
       {/* ======================================================== */}
       <group ref={leavesGroupRef} position={[-1.3, 1.65, 0.0]}>
         <mesh material={darkBaseMaterial} position={[0, -0.04, 0]}>
@@ -771,17 +880,17 @@ function LogoRevealScene({
       </group>
 
       {/* ======================================================== */}
-      {/* 6. TYPOGRAPHY: Pure White (#FFFFFF) Snapping Lockup      */}
+      {/* 8. TYPOGRAPHY: Snapping "Nana Creative" 3D Letters       */}
       {/* ======================================================== */}
       <group>
         {LETTERS_CONFIG.map((cfg, index) => {
           return (
             <Float
               key={cfg.id}
-              speed={isAligned ? 0 : 2.0}
-              rotationIntensity={isAligned ? 0 : 1.2}
-              floatIntensity={isAligned ? 0 : 1.4}
-              floatingRange={isAligned ? [0, 0] : [-0.08, 0.08]}
+              speed={isLockedUp ? 0 : 2.0}
+              rotationIntensity={isLockedUp ? 0 : 1.2}
+              floatIntensity={isLockedUp ? 0 : 1.4}
+              floatingRange={isLockedUp ? [0, 0] : [-0.08, 0.08]}
             >
               <group
                 ref={(el) => {
@@ -814,332 +923,25 @@ function LogoRevealScene({
 }
 
 // =========================================================================
-// 4. MAIN INTERACTIVE EXPERIENCE (CAMERA FLY-THROUGH & LOGO REVEAL)
-// =========================================================================
-function CinematicHeroMaster() {
-  const { camera, pointer, size } = useThree();
-  const isMobile = size.width < 768;
-  const isSmallMobile = size.width < 480;
-
-  // State: whether we are in the initial studio diorama or zoomed into the digital void
-  const [isZoomedIn, setIsZoomedIn] = useState(false);
-  const [isAligned, setIsAligned] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const isAnimatingRef = useRef(false);
-
-  // References for Scene 1 (Studio Diorama)
-  const dioramaMouseRef = useRef<THREE.Mesh>(null);
-  const robotRightArmRef = useRef<THREE.Group>(null);
-
-  // References for Scene 2 (Logo Reveal)
-  const mouseGroupRef = useRef<THREE.Group>(null);
-  const leftClickRef = useRef<THREE.Mesh>(null);
-  const scrollWheelRef = useRef<THREE.Mesh>(null);
-  const leavesGroupRef = useRef<THREE.Group>(null);
-  const sparklesGroupRef = useRef<THREE.Group>(null);
-  const lettersGroupRefs = useRef<(THREE.Group | null)[]>([]);
-
-  // Opacity tracking for seamless crossfade between diorama and digital void
-  const [dioramaOpacity, setDioramaOpacity] = useState(1.0);
-  const dioramaOpacityRef = useRef({ value: 1.0 });
-
-  // Camera Proxy for GSAP animation
-  // Initial starting wide position: over the figure's shoulder looking at the glowing monitor
-  const cameraProxy = useRef({
-    x: 1.75,
-    y: 1.35,
-    z: 2.7,
-    lookX: 0,
-    lookY: 0.85,
-    lookZ: -0.5,
-  });
-
-  // Luminous Stem Material
-  const stemMaterial = useMemo(() => {
-    return new THREE.MeshStandardMaterial({
-      color: new THREE.Color("#8CC63F"),
-      emissive: new THREE.Color("#8CC63F"),
-      emissiveIntensity: 1.2,
-      roughness: 0.18,
-      metalness: 0.1,
-    });
-  }, []);
-
-  // Automated 3D Cinematic Sequence definition
-  const playAutomatedSequence = () => {
-    if (isAnimatingRef.current) return;
-    isAnimatingRef.current = true;
-    setIsZoomedIn(true);
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        isAnimatingRef.current = false;
-      },
-    });
-
-    // -------------------------------------------------------------
-    // PHASE 1: Figure automatically animates to "click" the mouse
-    // -------------------------------------------------------------
-    if (robotRightArmRef.current) {
-      tl.to(
-        robotRightArmRef.current.rotation,
-        {
-          x: 0.88,
-          duration: 0.28,
-          ease: "power2.in",
-        },
-        0.2
-      );
-      tl.to(
-        robotRightArmRef.current.rotation,
-        {
-          x: 0.68,
-          duration: 0.22,
-          ease: "power2.out",
-        },
-        0.48
-      );
-    }
-
-    if (dioramaMouseRef.current) {
-      tl.to(
-        dioramaMouseRef.current.scale,
-        {
-          y: 0.65,
-          duration: 0.12,
-          yoyo: true,
-          repeat: 1,
-          ease: "power1.inOut",
-        },
-        0.45
-      );
-    }
-
-    // -------------------------------------------------------------
-    // PHASE 2: Camera flies over shoulder and zooms into monitor screen
-    // -------------------------------------------------------------
-    const targetZ = isSmallMobile ? 7.2 : isMobile ? 6.3 : 5.2;
-
-    tl.to(
-      cameraProxy.current,
-      {
-        x: 0,
-        y: 0.25,
-        z: targetZ,
-        lookX: 0,
-        lookY: 0.25,
-        lookZ: 0,
-        duration: 2.1,
-        ease: "power2.inOut",
-      },
-      0.6
-    );
-
-    // Fade out Diorama as camera passes through the monitor screen into digital void
-    tl.to(
-      dioramaOpacityRef.current,
-      {
-        value: 0.0,
-        duration: 0.8,
-        ease: "power1.in",
-        onUpdate: () => setDioramaOpacity(dioramaOpacityRef.current.value),
-      },
-      1.35
-    );
-
-    // -------------------------------------------------------------
-    // PHASE 3: Reveal deep digital void (#1B263B) and glowing L-shaped stem
-    // -------------------------------------------------------------
-    tl.to(
-      stemMaterial,
-      {
-        emissiveIntensity: 3.5,
-        duration: 0.45,
-        yoyo: true,
-        repeat: 1,
-        ease: "power2.out",
-      },
-      1.7
-    );
-
-    if (sparklesGroupRef.current) {
-      tl.to(
-        sparklesGroupRef.current.scale,
-        {
-          x: 1.85,
-          y: 1.85,
-          z: 1.85,
-          duration: 0.5,
-          yoyo: true,
-          repeat: 1,
-          ease: "power2.out",
-        },
-        1.75
-      );
-    }
-
-    if (leavesGroupRef.current) {
-      tl.to(
-        leavesGroupRef.current.scale,
-        {
-          x: 1.3,
-          y: 1.3,
-          z: 1.3,
-          duration: 0.35,
-          yoyo: true,
-          repeat: 1,
-          ease: "back.out(2)",
-        },
-        1.7
-      );
-    }
-
-    // -------------------------------------------------------------
-    // PHASE 4: Scattered 3D Letters fly together and snap into logo lockup
-    // -------------------------------------------------------------
-    setIsAligned(true);
-    LETTERS_CONFIG.forEach((cfg, index) => {
-      const group = lettersGroupRefs.current[index];
-      if (!group) return;
-
-      tl.to(
-        group.position,
-        {
-          x: cfg.targetPos[0],
-          y: cfg.targetPos[1],
-          z: cfg.targetPos[2],
-          duration: 1.15,
-          ease: "back.out(1.4)",
-        },
-        1.85 + index * 0.038
-      );
-
-      tl.to(
-        group.rotation,
-        {
-          x: 0,
-          y: 0,
-          z: 0,
-          duration: 1.0,
-          ease: "power2.out",
-        },
-        1.85 + index * 0.038
-      );
-    });
-  };
-
-  // Set initial scattered positions and trigger automated sequence on mount
-  useEffect(() => {
-    LETTERS_CONFIG.forEach((cfg, index) => {
-      const group = lettersGroupRefs.current[index];
-      if (group) {
-        group.position.set(...cfg.scatPos);
-        group.rotation.set(...cfg.scatRot);
-      }
-    });
-
-    // Auto-play smoothly on component mount
-    const timer = setTimeout(() => {
-      playAutomatedSequence();
-    }, 600);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Mouse hover scale feedback
-  useEffect(() => {
-    if (!mouseGroupRef.current) return;
-    gsap.to(mouseGroupRef.current.scale, {
-      x: isHovered ? 1.07 : 1.0,
-      y: isHovered ? 1.07 : 1.0,
-      z: isHovered ? 1.07 : 1.0,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  }, [isHovered]);
-
-  // Frame Loop: Smooth camera placement + subtle handheld cinematic parallax in diorama mode
-  useFrame(() => {
-    if (!isZoomedIn && !isAnimatingRef.current) {
-      // Subtle handheld drift based on mouse coordinates in Diorama mode
-      const parallaxX = pointer.x * 0.18;
-      const parallaxY = pointer.y * 0.12;
-
-      camera.position.set(
-        cameraProxy.current.x + parallaxX,
-        cameraProxy.current.y + parallaxY,
-        cameraProxy.current.z
-      );
-      camera.lookAt(
-        cameraProxy.current.lookX,
-        cameraProxy.current.lookY,
-        cameraProxy.current.lookZ
-      );
-    } else {
-      camera.position.set(
-        cameraProxy.current.x,
-        cameraProxy.current.y,
-        cameraProxy.current.z
-      );
-      camera.lookAt(
-        cameraProxy.current.lookX,
-        cameraProxy.current.lookY,
-        cameraProxy.current.lookZ
-      );
-    }
-  });
-
-  return (
-    <group scale={isSmallMobile ? [0.72, 0.72, 0.72] : isMobile ? [0.84, 0.84, 0.84] : [1, 1, 1]}>
-      {/* SCENE 1: STUDIO DIORAMA (Fades out when entering the computer monitor) */}
-      {dioramaOpacity > 0.01 && (
-        <StudioDiorama
-          opacity={dioramaOpacity}
-          dioramaMouseRef={dioramaMouseRef}
-          robotRightArmRef={robotRightArmRef}
-        />
-      )}
-
-      {/* SCENE 2: THE LOGO REVEAL (Inside the Digital Void) */}
-      <group visible={isZoomedIn || dioramaOpacity < 0.9}>
-        <LogoRevealScene
-          isAligned={isAligned}
-          lettersGroupRefs={lettersGroupRefs}
-          sparklesGroupRef={sparklesGroupRef}
-          leavesGroupRef={leavesGroupRef}
-          stemMaterial={stemMaterial}
-          leftClickRef={leftClickRef}
-          scrollWheelRef={scrollWheelRef}
-          mouseGroupRef={mouseGroupRef}
-          isHovered={isHovered}
-          setIsHovered={setIsHovered}
-        />
-      </group>
-    </group>
-  );
-}
-
-// =========================================================================
-// 5. EXPORTED PURE 3D COMPONENT (ZERO HTML/CSS UI OVERLAYS)
+// 4. EXPORTED PURE 3D COMPONENT (ZERO HTML/CSS UI OVERLAYS)
 // =========================================================================
 export interface NanaInteractiveLogo3DProps {
   className?: string;
 }
 
 export function NanaInteractiveLogo3D({
-  className = "h-[400px] sm:h-[500px] lg:h-[620px] w-full",
+  className = "h-[380px] sm:h-[460px] md:h-[520px] lg:h-[620px] w-full",
 }: NanaInteractiveLogo3DProps) {
   return (
     <div
       className={`relative select-none overflow-hidden rounded-3xl bg-[#1B263B] border border-[#2A3A54] shadow-2xl shadow-black/50 ${className}`}
       style={{ touchAction: "pan-y" }}
     >
-      {/* 100% PURE 3D CANVAS - ZERO ABSOLUTE HTML/CSS OVERLAYS */}
       <Suspense fallback={null}>
         <Canvas
           shadows
           dpr={[1, 1.8]}
-          camera={{ position: [1.75, 1.35, 2.7], fov: 44 }}
+          camera={{ position: [0.2, 0.35, 5.2], fov: 44 }}
           gl={{
             antialias: true,
             powerPreference: "high-performance",
@@ -1152,22 +954,22 @@ export function NanaInteractiveLogo3D({
           <color attach="background" args={["#1B263B"]} />
 
           {/* Dim, Deep Navy Ambient Light Filling Room */}
-          <ambientLight intensity={0.32} color="#1B263B" />
+          <ambientLight intensity={0.36} color="#1B263B" />
 
           {/* Soft Studio Directional Fill */}
-          <directionalLight position={[-3, 4, 3]} intensity={0.65} color="#FFFFFF" />
+          <directionalLight position={[-3, 4, 3]} intensity={0.7} color="#FFFFFF" castShadow />
 
           {/* Emerald Point Light near the vertical stem */}
           <pointLight
             position={[-1.3, 0.8, 1.6]}
-            intensity={2.6}
+            intensity={2.8}
             color="#8CC63F"
             distance={6}
             decay={2}
           />
 
-          {/* Master Cinematic Fly-Through Scene */}
-          <CinematicHeroMaster />
+          {/* Continuous Recycling Master Scene */}
+          <ContinuousHeroScene />
         </Canvas>
       </Suspense>
     </div>

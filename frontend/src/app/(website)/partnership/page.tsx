@@ -12,10 +12,10 @@ export default function PartnershipPage() {
     <div className="min-h-screen bg-white">
       {/* 1. Partnership Hero */}
       <motion.section
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="border-b border-[#E8F3EC] bg-[#F7F9F8] py-16 lg:py-24"
+        className="border-b border-[#E8F3EC] bg-[#F7F9F8] py-12 sm:py-18 lg:py-24"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="max-w-3xl">
@@ -23,7 +23,7 @@ export default function PartnershipPage() {
               <Handshake className="h-4 w-4 text-[#8CC63F]" />
               <span>{nanaPartnershipContent.badge}</span>
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-[#0B3B24]">
+            <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-[#0B3B24]">
               {nanaPartnershipContent.headline}
             </h1>
             <p className="mt-4 text-lg sm:text-xl text-[#1B263B]/75 leading-relaxed font-light">
@@ -54,9 +54,9 @@ export default function PartnershipPage() {
       <PartnersMap />
 
       {/* 3. Direct Link to Master Client Portfolio (Consolidation) */}
-      <section className="border-t border-[#E8F3EC] bg-[#F7F9F8] py-16 lg:py-20">
+      <section className="border-t border-[#E8F3EC] bg-[#F7F9F8] py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 rounded-3xl border border-[#E8F3EC] bg-white p-8 lg:p-12 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 rounded-3xl border border-[#E8F3EC] bg-white p-6 sm:p-8 lg:p-12 shadow-sm">
             <div className="max-w-xl">
               <span className="inline-flex items-center gap-2 rounded-full bg-[#E8F3EC] px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#0B3B24] mb-3">
                 <Sparkles className="h-3.5 w-3.5 text-[#8CC63F]" />
